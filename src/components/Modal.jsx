@@ -64,7 +64,7 @@ export default function Modal({ state, onClose, onPrev, onNext }) {
               <>
                 <img
                   src={driveImageUrl(state.item.id, 3200)}
-                  alt={state.item.title}
+                  alt={`Photo ${state.index + 1} of ${state.total}`}
                   className="mx-auto max-h-[85vh] w-auto max-w-full rounded object-contain shadow-2xl"
                   onError={(e) => {
                     const el = e.currentTarget
@@ -82,13 +82,14 @@ export default function Modal({ state, onClose, onPrev, onNext }) {
                   }}
                 />
                 <div className="mt-4 text-center">
-                  <p className="font-[family-name:var(--font-display)] text-2xl text-white">
-                    {state.item.title}
-                  </p>
-                  {state.item.description && (
-                    <p className="mt-1 text-sm text-white/70">{state.item.description}</p>
+                  {state.item.description?.trim() && (
+                    <p className="font-[family-name:var(--font-body)] text-sm text-white/80">
+                      {state.item.description}
+                    </p>
                   )}
-                  <p className="mt-2 text-xs text-white/45">
+                  <p
+                    className={`text-xs text-white/45 ${state.item.description?.trim() ? 'mt-2' : ''}`}
+                  >
                     {state.index + 1} / {state.total}
                   </p>
                 </div>

@@ -9,6 +9,7 @@ export default function Card({
   variant,
   onOpen,
   layoutId,
+  ariaLabel,
 }) {
   const isVideo = variant === 'video'
   const thumb = isVideo ? driveThumbnailUrl(item.id) : driveImageUrl(item.id)
@@ -17,6 +18,7 @@ export default function Card({
     <motion.button
       type="button"
       layoutId={layoutId}
+      aria-label={ariaLabel ?? (isVideo ? item.title : 'Open photo')}
       onClick={() => onOpen(item)}
       whileHover={{ scale: 1.05 }}
       transition={{ type: 'spring', stiffness: 260, damping: 22 }}
@@ -54,11 +56,17 @@ export default function Card({
       )}
 
       <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black via-black/40 to-transparent p-3 opacity-0 transition duration-300 group-hover:opacity-100">
-        <p className="font-[family-name:var(--font-display)] text-lg leading-tight text-white">
-          {item.title}
-        </p>
+        {isVideo && (
+          <p className="font-[family-name:var(--font-display)] text-lg leading-tight text-white">
+            {item.title}
+          </p>
+        )}
         {item.description && (
-          <p className="mt-1 line-clamp-2 text-left text-xs text-white/80">{item.description}</p>
+          <p
+            className={`line-clamp-2 text-left text-xs text-white/80 ${isVideo ? 'mt-1' : 'text-sm md:text-xs'}`}
+          >
+            {item.description}
+          </p>
         )}
       </div>
     </motion.button>

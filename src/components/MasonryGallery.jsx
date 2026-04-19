@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { driveAltMediaUrl, driveImageUrl } from '../utils/driveUrls'
 import {
   autoGridPlacement,
+  computeMasonryDisplayOrder,
   getImageOrientation,
   loadingGridPlacement,
 } from '../utils/masonryLayout'
@@ -42,19 +43,21 @@ export default function MasonryGallery({
     shouldFetchDrive ? { status: 'loading' } : { status: 'idle' },
   )
 
-  /** Sizes measured in-browser when Drive omits `imageMediaMetadata`. */
-  const [measured, setMeasured] = useState({})
+  /** Natural sizes when Drive omits metadata — keyed by file id for stable order when using `masonryRhythm`. */
+  const [measuredById, setMeasuredById] = useState({})
 
   useEffect(() => {
     if (!shouldFetchDrive) return undefined
     let cancelled = false
     startTransition(() => setLoadState({ status: 'loading' }))
-    fetchDriveFolderImageFiles(folderId, apiKey)
+    fetchDriveFolderImageFiles(folderId, apiKey, {
+      orderBy: section.driveListOrderBy || 'name',
+    })
       .then((items) => {
         if (!cancelled) {
           startTransition(() => {
             setLoadState({ status: 'ready', items })
-            setMeasured({})
+            setMeasuredById({})
           })
         }
       })
@@ -64,7 +67,7 @@ export default function MasonryGallery({
     return () => {
       cancelled = true
     }
-  }, [shouldFetchDrive, folderId, apiKey])
+  }, [shouldFetchDrive, folderId, apiKey, section.driveListOrderBy])
 
   const effectiveItems = useMemo(() => {
     const fallback = section.items ?? []
@@ -80,25 +83,37 @@ export default function MasonryGallery({
   )
 
   const dimsFor = useCallback(
-    (item, index) => {
+    (item) => {
       if (item.width && item.height) return { w: item.width, h: item.height }
-      return measured[index] ?? null
+      const id = item.id
+      if (id && measuredById[id]) return measuredById[id]
+      return null
     },
-    [measured],
+    [measuredById],
   )
 
-  const onImgLoad = useCallback((index, e) => {
+  const onImgLoad = useCallback((item, e) => {
     const el = e.currentTarget
     const w = el.naturalWidth
     const h = el.naturalHeight
-    if (!w || !h) return
-    setMeasured((prev) => {
-      if (prev[index]?.w === w && prev[index]?.h === h) return prev
-      return { ...prev, [index]: { w, h } }
+    if (!w || !h || !item.id) return
+    setMeasuredById((prev) => {
+      if (prev[item.id]?.w === w && prev[item.id]?.h === h) return prev
+      return { ...prev, [item.id]: { w, h } }
     })
   }, [])
 
-  const placementFor = (item, index) => {
+  const displayOrder = useMemo(() => {
+    if (!section.masonryRhythm || effectiveItems.length === 0) {
+      return effectiveItems.map((_, i) => i)
+    }
+    const chunkSize = section.masonryRhythmChunkSize
+    return computeMasonryDisplayOrder(effectiveItems, measuredById, {
+      chunkSize: typeof chunkSize === 'number' && chunkSize >= 2 ? chunkSize : undefined,
+    })
+  }, [effectiveItems, measuredById, section.masonryRhythm, section.masonryRhythmChunkSize])
+
+  const placementFor = (item) => {
     if (!wide) return { gridColumn: '1 / -1' }
 
     if (!autoLayout && item.gridColumn && item.gridRow) {
@@ -109,14 +124,14 @@ export default function MasonryGallery({
       return { gridColumn: item.gridColumn, gridRow: item.gridRow }
     }
 
-    const m = dimsFor(item, index)
+    const m = dimsFor(item)
     const ratio = m ? m.w / m.h : null
     if (ratio == null) return loadingGridPlacement()
     return autoGridPlacement(ratio)
   }
 
-  const aspectClassFor = (item, index) => {
-    const m = dimsFor(item, index)
+  const aspectClassFor = (item) => {
+    const m = dimsFor(item)
     if (!m) return 'aspect-[3/2]'
     const o = getImageOrientation(m.w, m.h)
     if (o === 'portrait') return 'aspect-[2/3]'
@@ -161,18 +176,20 @@ export default function MasonryGallery({
         {!showLoading && effectiveItems.length > 0 && (
           <div className="rounded-none bg-white p-[4px] md:p-1">
             <div className="grid grid-cols-1 gap-[3px] bg-white md:auto-rows-[minmax(200px,18vw)] md:grid-flow-dense md:grid-cols-12 md:gap-[3px]">
-              {effectiveItems.map((item, index) => {
-                const placement = placementFor(item, index)
-                const mobileAspect = aspectClassFor(item, index)
+              {displayOrder.map((originalIndex, visualIndex) => {
+                const item = effectiveItems[originalIndex]
+                const placement = placementFor(item)
+                const mobileAspect = aspectClassFor(item)
 
                 return (
                   <motion.button
-                    key={`${item.id}-${index}`}
+                    key={`${item.id}-${originalIndex}`}
                     type="button"
+                    aria-label={`Open photo ${originalIndex + 1} of ${effectiveItems.length}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-40px' }}
-                    transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.35) }}
+                    transition={{ duration: 0.35, delay: Math.min(visualIndex * 0.04, 0.35) }}
                     whileHover={{ scale: wide ? 1.008 : 1 }}
                     className={`group relative w-full overflow-hidden rounded-none bg-[#e8e4dc] ${mobileAspect} min-h-[200px] md:aspect-auto md:min-h-0`}
                     style={placement}
@@ -180,16 +197,16 @@ export default function MasonryGallery({
                       onOpenItem({
                         section: sectionForModal,
                         item,
-                        index,
+                        index: originalIndex,
                       })
                     }
                   >
                     <img
                       src={driveImageUrl(item.id)}
-                      alt={item.title || ''}
+                      alt=""
                       className="h-full w-full object-cover transition duration-500 group-hover:brightness-[0.97]"
                       loading="lazy"
-                      onLoad={(e) => onImgLoad(index, e)}
+                      onLoad={(e) => onImgLoad(item, e)}
                       onError={(e) => {
                         const el = e.currentTarget
                         if (el.dataset.driveFallback === 'alt') {

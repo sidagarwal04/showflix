@@ -16,11 +16,14 @@ function stripExtension(filename) {
 /**
  * @param {string} folderId
  * @param {string} apiKey
+ * @param {{ orderBy?: string }} [options] — Drive `files.list` sort, e.g. `'name'` (default), `'createdTime'`, `'modifiedTime'`.
  */
-export async function fetchDriveFolderImageFiles(folderId, apiKey) {
+export async function fetchDriveFolderImageFiles(folderId, apiKey, options = {}) {
   if (!folderId?.trim() || !apiKey?.trim()) {
     throw new Error('Missing Drive folder id or API key')
   }
+
+  const orderBy = options.orderBy?.trim() || 'name'
 
   const collected = []
   let pageToken
@@ -30,7 +33,7 @@ export async function fetchDriveFolderImageFiles(folderId, apiKey) {
       q: `'${folderId}' in parents and trashed = false`,
       fields: 'nextPageToken, files(id, name, mimeType, imageMediaMetadata(width, height))',
       pageSize: '100',
-      orderBy: 'name',
+      orderBy,
       key: apiKey.trim(),
     })
     if (pageToken) params.set('pageToken', pageToken)
