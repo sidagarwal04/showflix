@@ -144,11 +144,8 @@ export const sprinkleSeasonGallerySection = {
   title: "🎀 Sprinkle Season · The Preview Cut",
   type: 'masonry',
   masonryLayout: 'auto',
-  /** Drive list order — filenames like `…1.jpg`, `…4.jpg` stay chronological. */
-  driveListOrderBy: 'name',
-  /** Lead with landscapes + interleave portraits only within each chunk (keeps time order across chunks). */
-  masonryRhythm: true,
-  masonryRhythmChunkSize: 12,
+  /** Matches Drive web “Name” order: natural sort so `…2.jpg` comes before `…10.jpg` (plain `name` does not). */
+  driveListOrderBy: 'name_natural',
   items: [
     {
       id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
