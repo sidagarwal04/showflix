@@ -71,12 +71,12 @@ export default function Intro({ onDone }) {
   }
 
   const videoShell =
-    'relative h-auto w-full max-h-[min(50vh,380px)] object-contain md:absolute md:inset-0 md:h-full md:w-full md:max-h-none md:object-cover'
+    'absolute inset-0 h-full w-full min-h-0 min-w-0 object-cover'
 
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black px-6 md:block md:p-0"
+        className="fixed inset-0 z-[100] flex min-h-0 flex-col items-center justify-center bg-black md:block"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.6 }}
@@ -85,19 +85,13 @@ export default function Intro({ onDone }) {
           initial={{ scale: 0.92, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="relative flex w-full max-w-[min(92vw,960px)] items-center justify-center md:absolute md:inset-0 md:max-w-none"
+          className="absolute inset-0 flex min-h-0 w-full min-w-0 items-center justify-center"
         >
-          <div
-            className="pointer-events-none absolute inset-0 max-md:blur-3xl max-md:opacity-50 md:hidden"
-            style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(229, 9, 20, 0.35) 0%, transparent 55%)',
-            }}
-          />
           {useFallback ? (
             <img
               src={FALLBACK_IMG}
               alt="SR Originals"
-              className="relative h-auto w-full max-h-[min(28vh,200px)] object-contain md:absolute md:inset-0 md:h-full md:w-full md:max-h-none md:object-cover"
+              className="absolute inset-0 h-full w-full min-h-0 min-w-0 object-cover"
               width={13156}
               height={3100}
               draggable={false}
