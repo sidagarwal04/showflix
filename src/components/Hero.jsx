@@ -4,6 +4,9 @@ import { driveVideoDirectUrl } from '../utils/driveUrls'
 import { parseYoutubeVideoId, youtubeHeroEmbedUrl } from '../utils/youtube'
 import { PLACEHOLDER_HERO_VIDEO_SRC } from '../data/mediaConfig'
 
+/** Mute-state glyph — `public/nav-mute-icon.png` (black art; forced white in CSS). */
+const HERO_MUTE_ICON_SRC = '/nav-mute-icon.png'
+
 /**
  * Hero below static nav: fills `100dvh − nav` (match Navbar `h-[68px]` / `md:h-[70px]`).
  */
@@ -151,67 +154,59 @@ export default function Hero({
             className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full p-0 text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80 sm:h-12 sm:w-12"
             aria-label={muted ? 'Unmute video' : 'Mute video'}
           >
-            {/* Frosted white disk behind the line icon (legibility on dark video) */}
+            {/* Frosted disk behind the glyph (legibility on dark video) */}
             <span
               className="pointer-events-none absolute inset-0 rounded-full bg-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ring-1 ring-white/35 backdrop-blur-[6px]"
               aria-hidden
             />
-            <svg
-              viewBox="0 0 48 48"
-              className="relative z-10 h-[2.125rem] w-[2.125rem] sm:h-9 sm:w-9"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden
-            >
-              <circle cx="24" cy="24" r="19.75" stroke="currentColor" strokeWidth={sw} />
-              {/* Speaker: rounded back + flared cone (reference-style) */}
-              <rect
-                x="11.75"
-                y="18.5"
-                width="3.5"
-                height="11"
-                rx="1"
-                stroke="currentColor"
-                strokeWidth={sw}
+            {muted ? (
+              <img
+                src={HERO_MUTE_ICON_SRC}
+                alt=""
+                width={512}
+                height={512}
+                className="relative z-10 h-[2.125rem] w-[2.125rem] object-contain object-center [filter:brightness(0)_invert(1)] sm:h-9 sm:w-9"
+                decoding="async"
+                draggable={false}
               />
-              <path
-                d="M 15.25 18.75 L 22.75 14.75 L 22.75 33.25 L 15.25 29.25 Z"
-                stroke="currentColor"
-                strokeWidth={sw}
-                strokeLinejoin="round"
-              />
-              {muted ? (
-                <>
-                  <path
-                    d="M 27 16.5 L 36.25 31.5"
-                    stroke="currentColor"
-                    strokeWidth={sw}
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M 36.25 16.5 L 27 31.5"
-                    stroke="currentColor"
-                    strokeWidth={sw}
-                    strokeLinecap="round"
-                  />
-                </>
-              ) : (
-                <>
-                  <path
-                    d="M 25.25 17.5 Q 29.25 24 25.25 30.5"
-                    stroke="currentColor"
-                    strokeWidth={sw}
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M 29 14.75 Q 36.25 24 29 33.25"
-                    stroke="currentColor"
-                    strokeWidth={sw}
-                    strokeLinecap="round"
-                  />
-                </>
-              )}
-            </svg>
+            ) : (
+              <svg
+                viewBox="0 0 48 48"
+                className="relative z-10 h-[2.125rem] w-[2.125rem] sm:h-9 sm:w-9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden
+              >
+                <circle cx="24" cy="24" r="19.75" stroke="currentColor" strokeWidth={sw} />
+                <rect
+                  x="11.75"
+                  y="18.5"
+                  width="3.5"
+                  height="11"
+                  rx="1"
+                  stroke="currentColor"
+                  strokeWidth={sw}
+                />
+                <path
+                  d="M 15.25 18.75 L 22.75 14.75 L 22.75 33.25 L 15.25 29.25 Z"
+                  stroke="currentColor"
+                  strokeWidth={sw}
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M 25.25 17.5 Q 29.25 24 25.25 30.5"
+                  stroke="currentColor"
+                  strokeWidth={sw}
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M 29 14.75 Q 36.25 24 29 33.25"
+                  stroke="currentColor"
+                  strokeWidth={sw}
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
           </button>
         </div>
       </div>
