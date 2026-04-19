@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Netflix-inspired palette + typography tokens (Tailwind v4 @theme) */
+@theme {
+  --color-netflix-black: #141414;
+  --color-netflix-red: #e50914;
+  --color-netflix-text: #ebebeb;
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Smooth scrolling for in-page anchors from React Router */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--color-netflix-black);
+  color: var(--color-netflix-text);
+  font-family: var(--font-body);
+}
+
+/* Hide scrollbar for horizontal carousels while keeping touch/drag scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
