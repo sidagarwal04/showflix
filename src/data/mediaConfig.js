@@ -77,8 +77,8 @@ export const mediaConfig = {
        * Set `masonryLayout: 'manual'` and per-item `gridColumn` / `gridRow` to hand-place tiles.
        * Single-item override: `layout: 'manual'` + `gridColumn` / `gridRow` on that item only.
        */
-      kicker: 'Still frames',
-      title: '✨ Maternity portraits',
+      kicker: "Spoiler: the finale's adorable",
+      title: "🔥 Bump era — director's cut",
       type: 'masonry',
       masonryLayout: 'auto',
       /** Fallback when API key is missing or fetch fails; Drive folder comes from env only (`VITE_GOOGLE_DRIVE_FOLDER_ID`). */
