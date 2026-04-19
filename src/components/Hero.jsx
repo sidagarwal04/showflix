@@ -41,10 +41,14 @@ export default function Hero({
     <section className="relative isolate h-[calc(100svh-68px)] min-h-[calc(100svh-68px)] w-full flex-shrink-0 overflow-hidden bg-black md:h-[calc(100svh-70px)] md:min-h-[calc(100svh-70px)]">
       {youtubeId ? (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {/*
+            Shift the embed **down** inside the hero (same box): larger +translate-y after -50%
+            so the focal area sits lower and doesn’t read as “under” the nav strip.
+          */}
           <iframe
             key={muted ? 'muted' : 'unmuted'}
             title="Hero background video"
-            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.22] -translate-x-1/2 translate-y-[calc(-50%+clamp(0.15rem,0.8vh,1rem))] border-0"
+            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.22] -translate-x-1/2 translate-y-[calc(-50%+clamp(2.25rem,6.5vh,5.25rem))] border-0"
             src={embedSrc}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen={false}
@@ -53,7 +57,7 @@ export default function Hero({
       ) : (
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-[center_58%]"
           src={videoSrc}
           autoPlay
           muted={muted}
@@ -61,6 +65,12 @@ export default function Hero({
           playsInline
         />
       )}
+
+      {/* Soft top edge so the picture doesn’t visually merge with the black nav above */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[2] h-28 bg-gradient-to-b from-black/50 to-transparent"
+        aria-hidden
+      />
 
       {/* Netflix-style readability: strong left + bottom fade */}
       <div
