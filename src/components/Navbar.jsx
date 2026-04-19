@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const linkClass = ({ isActive }) =>
   [
-    'text-sm font-medium transition-colors md:text-[15px]',
-    isActive ? 'text-white' : 'text-white/70 hover:text-white',
+    'text-[13px] font-medium transition-colors md:text-[15px]',
+    isActive ? 'text-white' : 'text-white/75 hover:text-white',
   ].join(' ')
 
 function scrollToTop() {
@@ -16,16 +16,8 @@ function scrollToTop() {
 const BRAND_LOGO_SRC = '/sr-originals-logo.png'
 
 export default function Navbar({ brandName = 'SIDFLIX' }) {
-  const [solid, setSolid] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
-
-  useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 24)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
 
   useEffect(() => {
     const onDoc = (e) => {
@@ -36,29 +28,22 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
   }, [])
 
   return (
-    <motion.header
-      className="fixed inset-x-0 top-0 z-50 transition-colors duration-300"
-      initial={false}
-      animate={{
-        backgroundColor: solid ? 'rgba(0,0,0,0.97)' : 'rgba(0,0,0,0)',
-        boxShadow: solid ? '0 8px 24px rgba(0,0,0,0.45)' : '0 0 0 rgba(0,0,0,0)',
-      }}
-    >
-      <div className="mx-auto flex max-w-[1920px] items-center justify-between gap-4 px-4 py-3 md:px-10">
+    <header className="relative z-40 w-full bg-black shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
+      <div className="mx-auto flex h-[68px] max-w-[1920px] items-center justify-between gap-3 px-4 sm:px-6 md:h-[70px] md:gap-6 md:px-10">
         <Link
           to="/"
           onClick={scrollToTop}
-          className="shrink-0 py-0.5 transition-opacity hover:opacity-90"
+          className="shrink-0 py-1 transition-opacity hover:opacity-90"
         >
           <img
             src={BRAND_LOGO_SRC}
             alt={brandName}
-            className="block h-7 w-auto md:h-8"
+            className="block h-8 w-auto md:h-9"
             decoding="async"
           />
         </Link>
 
-        <nav className="scrollbar-hide flex max-w-[60vw] flex-1 justify-center gap-4 overflow-x-auto whitespace-nowrap px-1 md:max-w-none md:gap-8">
+        <nav className="scrollbar-hide flex min-w-0 max-w-[56vw] flex-1 justify-center gap-3 overflow-x-auto whitespace-nowrap px-1 sm:gap-5 md:max-w-none md:gap-8">
           <NavLink to="/" className={linkClass} end onClick={scrollToTop}>
             Home
           </NavLink>
@@ -79,11 +64,24 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
             aria-expanded={menuOpen}
             aria-haspopup="menu"
             onClick={() => setMenuOpen((o) => !o)}
-            className="flex h-9 w-9 items-center justify-center rounded-sm border border-white/20 bg-black/40 text-white backdrop-blur-sm transition hover:border-white/40"
+            className="flex items-center gap-1 rounded p-0.5 text-white transition hover:opacity-90"
           >
             <span className="sr-only">Profile menu</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            <span
+              className="flex h-8 w-8 items-center justify-center rounded-sm bg-[#E50914] text-lg leading-none shadow-md md:h-9 md:w-9"
+              aria-hidden
+            >
+              🙂
+            </span>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="text-white/80"
+              aria-hidden
+            >
+              <path d="M7 10l5 5 5-5H7z" />
             </svg>
           </button>
           <AnimatePresence>
@@ -118,6 +116,6 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
           </AnimatePresence>
         </div>
       </div>
-    </motion.header>
+    </header>
   )
 }

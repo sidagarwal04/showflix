@@ -86,7 +86,8 @@ export default function Home() {
         onMoreInfo={() => setMoreInfo(true)}
       />
 
-      <div className="relative z-20 -mt-6 space-y-2 md:-mt-10">
+      {/* Slight overlap into hero fade (streaming-style); photos scroll below full-viewport hero */}
+      <div className="relative z-20 -mt-10 space-y-0 md:-mt-14">
         {sections.map((section) =>
           section.type === 'masonry' ? (
             <MasonryGallery key={section.id} section={section} onOpenItem={openFromGallery} />

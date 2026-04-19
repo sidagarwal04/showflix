@@ -120,7 +120,7 @@ export default function MasonryGallery({ section, onOpenItem }) {
   return (
     <section
       id={section.id}
-      className="scroll-mt-24 border-y border-black/5 bg-[#f4f0e8] py-10 text-[#2a2826] md:scroll-mt-28 md:py-14"
+      className="scroll-mt-6 border-y border-black/5 bg-[#f4f0e8] py-10 text-[#2a2826] md:scroll-mt-8 md:py-14"
     >
       <div className="mx-auto max-w-[1920px] px-4 md:px-10">
         {section.kicker && (

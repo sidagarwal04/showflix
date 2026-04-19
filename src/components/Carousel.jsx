@@ -5,7 +5,7 @@ export default function CarouselRow({ section, onOpenItem }) {
   const scrollerRef = useRef(null)
 
   return (
-    <section id={section.id} className="mb-10 scroll-mt-24 md:mb-14">
+    <section id={section.id} className="mb-10 scroll-mt-6 md:mb-14 md:scroll-mt-8">
       <h2 className="mb-4 px-4 text-lg font-semibold text-white md:px-10 md:text-xl">
         {section.title}
       </h2>

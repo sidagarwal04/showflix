@@ -5,7 +5,7 @@ import { parseYoutubeVideoId, youtubeHeroEmbedUrl } from '../utils/youtube'
 import { PLACEHOLDER_HERO_VIDEO_SRC } from '../data/mediaConfig'
 
 /**
- * Full-bleed hero: YouTube embed, Drive / direct MP4, or placeholder clip.
+ * Hero below static nav: fills `100dvh − nav` (match Navbar `h-[68px]` / `md:h-[70px]`).
  */
 export default function Hero({
   hero,
@@ -35,16 +35,15 @@ export default function Hero({
   const embedSrc = youtubeId ? youtubeHeroEmbedUrl(youtubeId, { muted }) : null
 
   return (
-    <section className="relative h-[min(88vh,920px)] w-full overflow-hidden bg-black md:h-[min(96vh,1000px)]">
+    <section
+      className="relative max-h-[calc(100dvh-68px)] min-h-[calc(100dvh-68px)] h-[calc(100dvh-68px)] w-full overflow-hidden bg-black md:max-h-[calc(100dvh-70px)] md:min-h-[calc(100dvh-70px)] md:h-[calc(100dvh-70px)]"
+    >
       {youtubeId ? (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          {/*
-            16:9 cover + slight zoom so the frame fills more height (less letterboxing than raw min-h-full).
-          */}
           <iframe
             key={muted ? 'muted' : 'unmuted'}
             title="Hero background video"
-            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.12] -translate-x-1/2 translate-y-[calc(-50%+clamp(0.25rem,1.2vh,1.5rem))] border-0"
+            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.14] -translate-x-1/2 translate-y-[calc(-50%+clamp(0.2rem,1vh,1.25rem))] border-0"
             src={embedSrc}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen={false}
@@ -62,85 +61,96 @@ export default function Hero({
         />
       )}
 
-      {/* Bottom fade + slight vignette */}
+      {/* Netflix-style readability: strong left + bottom fade */}
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#141414] via-black/50 to-black/30"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/90 via-black/45 to-black/10 md:from-black/85 md:via-black/35"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.5)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#141414] via-black/55 to-black/25"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_70%_20%,transparent_0%,rgba(0,0,0,0.35)_55%,rgba(0,0,0,0.65)_100%)]"
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto flex h-full max-w-[1920px] flex-col justify-end px-4 pb-16 pt-28 md:px-10 md:pb-24 md:pt-32">
+      <div className="relative z-10 mx-auto flex h-full min-h-0 max-w-[1920px] flex-col justify-end px-4 pb-10 pt-8 sm:px-6 sm:pb-14 sm:pt-10 md:px-10 md:pb-[clamp(2.5rem,6vw,5rem)] md:pt-12">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-2xl"
+          className="max-w-[min(36rem,100%)]"
         >
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.4em] text-white/85 md:text-sm">
+          <p className="mb-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-white/90 sm:mb-3 sm:text-xs md:text-sm md:tracking-[0.4em]">
             {hero.subtitle}
           </p>
 
-          <div className="mb-4 flex flex-wrap items-end gap-4">
-            <h1 className="font-[family-name:var(--font-display)] text-5xl leading-[0.95] text-white drop-shadow-lg md:text-7xl">
+          <div className="mb-3 flex flex-wrap items-end gap-3 sm:mb-4 sm:gap-4">
+            <h1 className="font-[family-name:var(--font-display)] text-[clamp(2.25rem,6.5vw,5rem)] leading-[0.95] text-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)] md:text-[clamp(3rem,7vw,5.5rem)]">
               {hero.title}
             </h1>
-            <span className="inline-flex items-center justify-center rounded-sm bg-[#E50914] px-2 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-lg md:text-sm">
+            <span className="inline-flex shrink-0 items-center justify-center rounded-sm bg-[#E50914] px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-white shadow-lg sm:text-xs md:px-3 md:text-sm">
               Top 10
             </span>
           </div>
 
-          <p className="mb-5 max-w-xl text-base leading-relaxed text-[#EBEBEB]/95 md:text-lg">
+          <p className="mb-4 max-w-xl text-[0.95rem] leading-relaxed text-[#EBEBEB] drop-shadow-md sm:text-base md:mb-5 md:text-lg">
             {hero.description}
           </p>
 
-          <p className="mb-8 text-sm text-white/85 md:text-base">
+          <p className="mb-0 text-xs text-white/90 drop-shadow sm:text-sm md:text-base">
             {hero.tags.map((t, i) => (
               <span key={t}>
-                {i > 0 && <span className="text-white/40"> • </span>}
+                {i > 0 && <span className="text-white/45"> • </span>}
                 {t}
               </span>
             ))}
           </p>
+        </motion.div>
 
-          <div className="flex flex-wrap items-center gap-3">
+        {/* Same row as Netflix: Play + More Info (left) · volume (right, vertically centered with buttons) */}
+        <div className="mt-8 flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-3 sm:mt-10">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <button
               type="button"
               onClick={onPlay}
-              className="inline-flex items-center gap-2 rounded-sm bg-white px-6 py-2.5 text-sm font-bold text-black shadow-lg transition hover:bg-white/90"
+              className="inline-flex h-11 min-h-[2.75rem] items-center gap-2 rounded-md bg-white px-7 text-base font-bold text-black shadow-lg transition hover:bg-white/90 sm:h-12 sm:min-h-[3rem] sm:px-10 sm:text-lg"
             >
-              <span aria-hidden>▶</span> Play
+              <span className="text-[0.85em]" aria-hidden>
+                ▶
+              </span>{' '}
+              Play
             </button>
             <button
               type="button"
               onClick={onMoreInfo}
-              className="inline-flex items-center gap-2 rounded-sm border border-white/30 bg-white/10 px-6 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
+              className="inline-flex h-11 min-h-[2.75rem] items-center gap-2 rounded-md border border-white/35 bg-white/[0.13] px-7 text-base font-semibold text-white backdrop-blur-md transition hover:bg-white/20 sm:h-12 sm:min-h-[3rem] sm:px-9 sm:text-lg"
             >
-              <span aria-hidden>ℹ</span> More Info
+              <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/80 text-xs font-bold" aria-hidden>
+                i
+              </span>
+              More Info
             </button>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 mx-auto flex max-w-[1920px] justify-end px-4 pb-6 md:px-10 md:pb-10">
-        <button
-          type="button"
-          onClick={toggleMute}
-          className="pointer-events-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/25 bg-black/50 text-white backdrop-blur-md transition hover:bg-black/70"
-          aria-label={muted ? 'Unmute video' : 'Mute video'}
-        >
-          {muted ? (
-            <span className="text-lg" aria-hidden>
-              🔇
-            </span>
-          ) : (
-            <span className="text-lg" aria-hidden>
-              🔊
-            </span>
-          )}
-        </button>
+          <button
+            type="button"
+            onClick={toggleMute}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/45 text-white shadow-lg backdrop-blur-md transition hover:bg-black/65 sm:h-12 sm:w-12"
+            aria-label={muted ? 'Unmute video' : 'Mute video'}
+          >
+            {muted ? (
+              <span className="text-xl leading-none sm:text-2xl" aria-hidden>
+                🔇
+              </span>
+            ) : (
+              <span className="text-xl leading-none sm:text-2xl" aria-hidden>
+                🔊
+              </span>
+            )}
+          </button>
+        </div>
       </div>
     </section>
   )
