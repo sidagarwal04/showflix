@@ -50,8 +50,8 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
           <NavLink to="/bump-era" className={linkClass}>
             Bump Era
           </NavLink>
-          <NavLink to="/baby-shower" className={linkClass}>
-            Baby Shower
+          <NavLink to="/sprinkle-season" className={linkClass}>
+            Sprinkle Season
           </NavLink>
           <NavLink to="/little-moments" className={linkClass}>
             Little Moments

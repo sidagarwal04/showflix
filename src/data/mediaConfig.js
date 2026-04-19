@@ -137,11 +137,11 @@ export const mediaConfig = {
   ],
 }
 
-/** `/baby-shower` — masonry only; folder id from `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER`. */
-export const babyShowerGallerySection = {
-  id: 'baby-shower',
-  kicker: "Function photos — edited",
-  title: '🎉 Baby shower',
+/** `/sprinkle-season` — masonry only; folder id from `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER`. */
+export const sprinkleSeasonGallerySection = {
+  id: 'sprinkle-season',
+  kicker: "The guest list, on film",
+  title: "🎀 Sprinkle Season · The Preview Cut",
   type: 'masonry',
   masonryLayout: 'auto',
   items: [

@@ -5,7 +5,7 @@ import { INTRO_STORAGE_KEY } from './constants/introStorage'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import BumpEra from './pages/BumpEra'
-import BabyShower from './pages/BabyShower'
+import SprinkleSeason from './pages/SprinkleSeason'
 import LittleMoments from './pages/LittleMoments'
 
 function shouldPlayIntro() {
@@ -29,7 +29,8 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/bump-era" element={<BumpEra />} />
               <Route path="/maternity" element={<Navigate to="/bump-era" replace />} />
-              <Route path="/baby-shower" element={<BabyShower />} />
+              <Route path="/sprinkle-season" element={<SprinkleSeason />} />
+              <Route path="/baby-shower" element={<Navigate to="/sprinkle-season" replace />} />
               <Route path="/little-moments" element={<LittleMoments />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

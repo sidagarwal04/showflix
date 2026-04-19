@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useState } from 'react'
 import MasonryGallery from '../components/MasonryGallery'
 import Modal from '../components/Modal'
-import { babyShowerGallerySection } from '../data/mediaConfig'
+import { sprinkleSeasonGallerySection } from '../data/mediaConfig'
 
 /**
- * Standalone gallery: starts below the nav with a Bump Era–style kicker + title, then the masonry grid.
- * Images load from `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER` (see `.env.example`).
+ * `/sprinkle-season` — standalone gallery (Bump Era–style heading + masonry).
+ * Folder: `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER` (see `.env.example`).
  */
-export default function BabyShower() {
+export default function SprinkleSeason() {
   const folderId = import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER?.trim() || ''
-  const section = useMemo(() => babyShowerGallerySection, [])
+  const section = useMemo(() => sprinkleSeasonGallerySection, [])
 
   const [modal, setModal] = useState(null)
 
