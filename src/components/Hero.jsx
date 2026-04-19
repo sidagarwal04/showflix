@@ -35,15 +35,13 @@ export default function Hero({
   const embedSrc = youtubeId ? youtubeHeroEmbedUrl(youtubeId, { muted }) : null
 
   return (
-    <section
-      className="relative max-h-[calc(100dvh-68px)] min-h-[calc(100dvh-68px)] h-[calc(100dvh-68px)] w-full overflow-hidden bg-black md:max-h-[calc(100dvh-70px)] md:min-h-[calc(100dvh-70px)] md:h-[calc(100dvh-70px)]"
-    >
+    <section className="relative isolate h-[calc(100svh-68px)] min-h-[calc(100svh-68px)] w-full flex-shrink-0 overflow-hidden bg-black md:h-[calc(100svh-70px)] md:min-h-[calc(100svh-70px)]">
       {youtubeId ? (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <iframe
             key={muted ? 'muted' : 'unmuted'}
             title="Hero background video"
-            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.14] -translate-x-1/2 translate-y-[calc(-50%+clamp(0.2rem,1vh,1.25rem))] border-0"
+            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.22] -translate-x-1/2 translate-y-[calc(-50%+clamp(0.15rem,0.8vh,1rem))] border-0"
             src={embedSrc}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen={false}

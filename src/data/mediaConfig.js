@@ -78,7 +78,7 @@ export const mediaConfig = {
        * Single-item override: `layout: 'manual'` + `gridColumn` / `gridRow` on that item only.
        */
       kicker: "Spoiler: the finale's adorable",
-      title: "🔥 Bump era — director's cut",
+      title: "🔥 Bump Era - Director's Cut",
       type: 'masonry',
       masonryLayout: 'auto',
       /** Fallback when API key is missing or fetch fails; Drive folder comes from env only (`VITE_GOOGLE_DRIVE_FOLDER_ID`). */
