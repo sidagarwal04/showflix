@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import Home from './Home'
 
 /**
- * Scrolls to maternity content on Home (currently the shoot row while “Maternity Films” is disabled in config).
+ * `/bump-era` — scrolls to the maternity shoot masonry on Home.
  */
-export default function Maternity() {
+export default function BumpEra() {
   useEffect(() => {
     const t = setTimeout(() => {
       document.getElementById('maternity-shoot')?.scrollIntoView({ behavior: 'smooth', block: 'start' })

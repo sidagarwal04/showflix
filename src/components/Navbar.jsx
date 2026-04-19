@@ -47,8 +47,8 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
           <NavLink to="/" className={linkClass} end onClick={scrollToTop}>
             Home
           </NavLink>
-          <NavLink to="/maternity" className={linkClass}>
-            Maternity
+          <NavLink to="/bump-era" className={linkClass}>
+            Bump Era
           </NavLink>
           <NavLink to="/baby-shower" className={linkClass}>
             Baby Shower

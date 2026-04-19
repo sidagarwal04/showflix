@@ -4,7 +4,7 @@ import Intro from './components/Intro'
 import { INTRO_STORAGE_KEY } from './constants/introStorage'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import Maternity from './pages/Maternity'
+import BumpEra from './pages/BumpEra'
 import BabyShower from './pages/BabyShower'
 import LittleMoments from './pages/LittleMoments'
 
@@ -27,7 +27,8 @@ export default function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
-              <Route path="/maternity" element={<Maternity />} />
+              <Route path="/bump-era" element={<BumpEra />} />
+              <Route path="/maternity" element={<Navigate to="/bump-era" replace />} />
               <Route path="/baby-shower" element={<BabyShower />} />
               <Route path="/little-moments" element={<LittleMoments />} />
               <Route path="*" element={<Navigate to="/" replace />} />
