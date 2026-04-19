@@ -34,6 +34,8 @@ export default function Hero({
 
   const embedSrc = youtubeId ? youtubeHeroEmbedUrl(youtubeId, { muted }) : null
 
+  const stroke = 1.35
+
   return (
     <section className="relative isolate h-[calc(100svh-68px)] min-h-[calc(100svh-68px)] w-full flex-shrink-0 overflow-hidden bg-black md:h-[calc(100svh-70px)] md:min-h-[calc(100svh-70px)]">
       {youtubeId ? (
@@ -135,18 +137,71 @@ export default function Hero({
           <button
             type="button"
             onClick={toggleMute}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-black/45 text-white shadow-lg backdrop-blur-md transition hover:bg-black/65 sm:h-12 sm:w-12"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-transparent p-0 text-white transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80 sm:h-12 sm:w-12"
             aria-label={muted ? 'Unmute video' : 'Mute video'}
           >
-            {muted ? (
-              <span className="text-xl leading-none sm:text-2xl" aria-hidden>
-                🔇
-              </span>
-            ) : (
-              <span className="text-xl leading-none sm:text-2xl" aria-hidden>
-                🔊
-              </span>
-            )}
+            <svg
+              viewBox="0 0 48 48"
+              className="h-10 w-10 sm:h-11 sm:w-11"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden
+            >
+              <circle
+                cx="24"
+                cy="24"
+                r="20.5"
+                stroke="currentColor"
+                strokeWidth={stroke}
+              />
+              {/* Speaker: back + cone */}
+              <rect
+                x="11.25"
+                y="18.25"
+                width="3.25"
+                height="11.5"
+                rx="0.6"
+                stroke="currentColor"
+                strokeWidth={stroke}
+              />
+              <path
+                d="M 14.5 18.5 L 22.25 14.25 L 22.25 33.75 L 14.5 29.5 Z"
+                stroke="currentColor"
+                strokeWidth={stroke}
+                strokeLinejoin="round"
+              />
+              {muted ? (
+                <>
+                  <path
+                    d="M26.75 17.25 35.75 30.75"
+                    stroke="currentColor"
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M35.75 17.25 26.75 30.75"
+                    stroke="currentColor"
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                  />
+                </>
+              ) : (
+                <>
+                  <path
+                    d="M 24.75 17.75 Q 28.5 24 24.75 30.25"
+                    stroke="currentColor"
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 28.25 15.25 Q 35.5 24 28.25 32.75"
+                    stroke="currentColor"
+                    strokeWidth={stroke}
+                    strokeLinecap="round"
+                  />
+                </>
+              )}
+            </svg>
           </button>
         </div>
       </div>
