@@ -1,6 +1,6 @@
 import { startTransition, useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { driveImageUrl } from '../utils/driveUrls'
+import { driveAltMediaUrl, driveImageUrl } from '../utils/driveUrls'
 import {
   autoGridPlacement,
   getImageOrientation,
@@ -8,19 +8,20 @@ import {
 } from '../utils/masonryLayout'
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { fetchDriveFolderImageFiles } from '../services/googleDrive'
+import { getGoogleDriveApiKey } from '../utils/googleDriveEnv.js'
 
 const FALLBACK_IMG =
   'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&w=1200&q=80'
 
 /**
  * Editorial masonry: cream panel, white hairline gutters, sharp corners.
- * With `VITE_GOOGLE_DRIVE_API_KEY` + `VITE_GOOGLE_DRIVE_FOLDER_ID`, loads files via Drive API.
+ * Drive: `getGoogleDriveApiKey()` — in dev prefers `VITE_GOOGLE_DRIVE_API_KEY_LOCAL`.
  */
 export default function MasonryGallery({ section, onOpenItem }) {
   const wide = useMediaQuery('(min-width: 768px)')
   const autoLayout = section.masonryLayout !== 'manual'
 
-  const apiKey = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY
+  const apiKey = getGoogleDriveApiKey()
   const folderId =
     import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID?.trim() || section.driveFolderId?.trim() || ''
   const shouldFetchDrive = Boolean(apiKey && folderId)
@@ -178,8 +179,20 @@ export default function MasonryGallery({ section, onOpenItem }) {
                       loading="lazy"
                       onLoad={(e) => onImgLoad(index, e)}
                       onError={(e) => {
-                        e.currentTarget.onerror = null
-                        e.currentTarget.src = FALLBACK_IMG
+                        const el = e.currentTarget
+                        if (el.dataset.driveFallback === 'alt') {
+                          el.onerror = null
+                          el.src = FALLBACK_IMG
+                          return
+                        }
+                        const alt = driveAltMediaUrl(item.id)
+                        if (alt) {
+                          el.dataset.driveFallback = 'alt'
+                          el.src = alt
+                          return
+                        }
+                        el.onerror = null
+                        el.src = FALLBACK_IMG
                       }}
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />

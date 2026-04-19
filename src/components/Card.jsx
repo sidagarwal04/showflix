@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { driveImageUrl, driveThumbnailUrl } from '../utils/driveUrls'
+import { driveAltMediaUrl, driveImageUrl, driveThumbnailUrl } from '../utils/driveUrls'
 
 const FALLBACK_IMG =
   'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&w=1200&q=80'
@@ -28,8 +28,20 @@ export default function Card({
         className="h-full w-full object-cover transition duration-300 group-hover:brightness-75"
         loading="lazy"
         onError={(e) => {
-          e.currentTarget.onerror = null
-          e.currentTarget.src = FALLBACK_IMG
+          const el = e.currentTarget
+          if (el.dataset.driveFallback === 'alt') {
+            el.onerror = null
+            el.src = FALLBACK_IMG
+            return
+          }
+          const alt = driveAltMediaUrl(item.id)
+          if (alt) {
+            el.dataset.driveFallback = 'alt'
+            el.src = alt
+            return
+          }
+          el.onerror = null
+          el.src = FALLBACK_IMG
         }}
       />
 

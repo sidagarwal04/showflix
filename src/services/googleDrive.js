@@ -1,17 +1,12 @@
 /**
  * Google Drive API v3 — list image files in a folder.
- *
- * Setup (summary):
- * 1. Google Cloud Console → enable “Google Drive API”.
- * 2. Credentials → API key; restrict it to Drive API (for production, add HTTP referrer / Netlify domain).
- * 3. Share the Drive folder: “Anyone with the link” → Viewer (so the key can list files).
- * 4. Put `VITE_GOOGLE_DRIVE_API_KEY` (and optional `VITE_GOOGLE_DRIVE_FOLDER_ID`) in `.env.local`.
- *
- * Note: A browser-exposed key is visible to visitors. For a private folder or stricter security,
- * use a Netlify Function or small backend to hold the key server-side.
  */
 
-const DRIVE_FILES = 'https://www.googleapis.com/drive/v3/files'
+import { googleApisBaseUrl } from '../utils/googleApis.js'
+
+function driveFilesListUrl() {
+  return `${googleApisBaseUrl()}/drive/v3/files`
+}
 
 function stripExtension(filename) {
   if (!filename) return 'Photo'
@@ -19,12 +14,8 @@ function stripExtension(filename) {
 }
 
 /**
- * Lists image files in a folder. Returns Drive `imageMediaMetadata` width/height when Google provides it
- * (often JPEG/HEIC; some formats may omit — the gallery still measures in the browser on load).
- *
- * @param {string} folderId Folder id from the URL `.../folders/FOLDER_ID`
- * @param {string} apiKey Google API key
- * @returns {Promise<Array<{ id: string, title: string, description?: string, width?: number, height?: number }>>}
+ * @param {string} folderId
+ * @param {string} apiKey
  */
 export async function fetchDriveFolderImageFiles(folderId, apiKey) {
   if (!folderId?.trim() || !apiKey?.trim()) {
@@ -44,7 +35,7 @@ export async function fetchDriveFolderImageFiles(folderId, apiKey) {
     })
     if (pageToken) params.set('pageToken', pageToken)
 
-    const res = await fetch(`${DRIVE_FILES}?${params.toString()}`)
+    const res = await fetch(`${driveFilesListUrl()}?${params.toString()}`)
     if (!res.ok) {
       const text = await res.text()
       throw new Error(text || `Drive API ${res.status}`)

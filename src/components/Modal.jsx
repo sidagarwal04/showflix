@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { driveImageUrl, driveVideoPreviewUrl } from '../utils/driveUrls'
+import { driveAltMediaUrl, driveImageUrl, driveVideoPreviewUrl } from '../utils/driveUrls'
 import { youtubeModalEmbedUrl } from '../utils/youtube'
 
 /**
@@ -66,6 +66,20 @@ export default function Modal({ state, onClose, onPrev, onNext }) {
                   src={driveImageUrl(state.item.id, 3200)}
                   alt={state.item.title}
                   className="mx-auto max-h-[85vh] w-auto max-w-full rounded object-contain shadow-2xl"
+                  onError={(e) => {
+                    const el = e.currentTarget
+                    if (el.dataset.driveFallback === 'alt') {
+                      el.onerror = null
+                      return
+                    }
+                    const alt = driveAltMediaUrl(state.item.id)
+                    if (alt) {
+                      el.dataset.driveFallback = 'alt'
+                      el.src = alt
+                    } else {
+                      el.onerror = null
+                    }
+                  }}
                 />
                 <div className="mt-4 text-center">
                   <p className="font-[family-name:var(--font-display)] text-2xl text-white">
