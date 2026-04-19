@@ -196,11 +196,6 @@ export default function MasonryGallery({ section, onOpenItem }) {
                       }}
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
-                    {item.title && (
-                      <span className="pointer-events-none absolute bottom-2 left-2 right-2 font-[family-name:var(--font-display)] text-sm text-white opacity-0 drop-shadow-md transition duration-300 group-hover:opacity-100 md:text-base">
-                        {item.title}
-                      </span>
-                    )}
                   </motion.button>
                 )
               })}
