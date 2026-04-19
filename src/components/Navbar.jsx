@@ -53,9 +53,11 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
           <NavLink to="/sprinkle-season" className={linkClass}>
             Sprinkle Season
           </NavLink>
+          {/* Little Moments — add back with route in App.jsx when ready
           <NavLink to="/little-moments" className={linkClass}>
             Little Moments
           </NavLink>
+          */}
         </nav>
 
         <div className="relative shrink-0" ref={menuRef}>

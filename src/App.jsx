@@ -6,7 +6,7 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import BumpEra from './pages/BumpEra'
 import SprinkleSeason from './pages/SprinkleSeason'
-import LittleMoments from './pages/LittleMoments'
+// import LittleMoments from './pages/LittleMoments' // enable when Little Moments goes live
 
 function shouldPlayIntro() {
   try {
@@ -31,7 +31,7 @@ export default function App() {
               <Route path="/maternity" element={<Navigate to="/bump-era" replace />} />
               <Route path="/sprinkle-season" element={<SprinkleSeason />} />
               <Route path="/baby-shower" element={<Navigate to="/sprinkle-season" replace />} />
-              <Route path="/little-moments" element={<LittleMoments />} />
+              {/* <Route path="/little-moments" element={<LittleMoments />} /> */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>

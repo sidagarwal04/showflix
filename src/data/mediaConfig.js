@@ -122,6 +122,9 @@ export const mediaConfig = {
         },
       ],
     },
+    /*
+     * ✨ Little Moments — uncomment when this section is ready.
+     * ---------------------------------------------------------------------------
     {
       id: 'little-moments',
       title: '✨ Little Moments',
@@ -134,6 +137,7 @@ export const mediaConfig = {
         },
       ],
     },
+    */
   ],
 }
 
