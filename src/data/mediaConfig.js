@@ -8,7 +8,7 @@
  *    https://drive.google.com/file/d/FILE_ID/view
  *    or from: https://drive.google.com/open?id=FILE_ID
  * 4. Paste ids into `videoId` / `items[].id`, OR use Drive API folder mode for masonry:
- *    set `driveFolderId`, add `VITE_GOOGLE_DRIVE_API_KEY` in `.env.local` (see `.env.example`).
+ *    set `VITE_GOOGLE_DRIVE_API_KEY` and `VITE_GOOGLE_DRIVE_FOLDER_ID` in `.env.local` / Netlify (see `.env.example`).
  *
  * URL formats used in the app:
  *   Images:  https://drive.google.com/uc?export=view&id=FILE_ID
@@ -81,9 +81,7 @@ export const mediaConfig = {
       title: '📸 Maternity Shoot',
       type: 'masonry',
       masonryLayout: 'auto',
-      /** Folder id from the URL …/folders/FOLDER_ID — used with VITE_GOOGLE_DRIVE_API_KEY */
-      driveFolderId: '13P6Ojl3PsLQwNEFagTtdp-B95hqE-QGu',
-      /** Fallback when API key is missing or fetch fails; omitted IDs still work for local dev */
+      /** Fallback when API key is missing or fetch fails; Drive folder comes from env only (`VITE_GOOGLE_DRIVE_FOLDER_ID`). */
       items: [
         {
           id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',

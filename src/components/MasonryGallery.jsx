@@ -14,7 +14,7 @@ const FALLBACK_IMG =
 
 /**
  * Editorial masonry: cream panel, white hairline gutters, sharp corners.
- * With `VITE_GOOGLE_DRIVE_API_KEY` + `driveFolderId` / `VITE_GOOGLE_DRIVE_FOLDER_ID`, loads files via Drive API.
+ * With `VITE_GOOGLE_DRIVE_API_KEY` + `VITE_GOOGLE_DRIVE_FOLDER_ID`, loads files via Drive API.
  */
 export default function MasonryGallery({ section, onOpenItem }) {
   const wide = useMediaQuery('(min-width: 768px)')
@@ -22,7 +22,7 @@ export default function MasonryGallery({ section, onOpenItem }) {
 
   const apiKey = import.meta.env.VITE_GOOGLE_DRIVE_API_KEY
   const folderId =
-    import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID?.trim() || section.driveFolderId?.trim()
+    import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID?.trim() || section.driveFolderId?.trim() || ''
   const shouldFetchDrive = Boolean(apiKey && folderId)
 
   const [loadState, setLoadState] = useState(() =>
