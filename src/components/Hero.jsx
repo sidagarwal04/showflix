@@ -34,7 +34,8 @@ export default function Hero({
 
   const embedSrc = youtubeId ? youtubeHeroEmbedUrl(youtubeId, { muted }) : null
 
-  const stroke = 1.35
+  /** Uniform stroke for volume glyph (viewBox 48×48) */
+  const sw = 1.4
 
   return (
     <section className="relative isolate h-[calc(100svh-68px)] min-h-[calc(100svh-68px)] w-full flex-shrink-0 overflow-hidden bg-black md:h-[calc(100svh-70px)] md:min-h-[calc(100svh-70px)]">
@@ -137,66 +138,65 @@ export default function Hero({
           <button
             type="button"
             onClick={toggleMute}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-transparent p-0 text-white transition hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80 sm:h-12 sm:w-12"
+            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full p-0 text-white transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/80 sm:h-12 sm:w-12"
             aria-label={muted ? 'Unmute video' : 'Mute video'}
           >
+            {/* Frosted white disk behind the line icon (legibility on dark video) */}
+            <span
+              className="pointer-events-none absolute inset-0 rounded-full bg-white/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] ring-1 ring-white/35 backdrop-blur-[6px]"
+              aria-hidden
+            />
             <svg
               viewBox="0 0 48 48"
-              className="h-10 w-10 sm:h-11 sm:w-11"
+              className="relative z-10 h-[2.125rem] w-[2.125rem] sm:h-9 sm:w-9"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden
             >
-              <circle
-                cx="24"
-                cy="24"
-                r="20.5"
-                stroke="currentColor"
-                strokeWidth={stroke}
-              />
-              {/* Speaker: back + cone */}
+              <circle cx="24" cy="24" r="19.75" stroke="currentColor" strokeWidth={sw} />
+              {/* Speaker: rounded back + flared cone (reference-style) */}
               <rect
-                x="11.25"
-                y="18.25"
-                width="3.25"
-                height="11.5"
-                rx="0.6"
+                x="11.75"
+                y="18.5"
+                width="3.5"
+                height="11"
+                rx="1"
                 stroke="currentColor"
-                strokeWidth={stroke}
+                strokeWidth={sw}
               />
               <path
-                d="M 14.5 18.5 L 22.25 14.25 L 22.25 33.75 L 14.5 29.5 Z"
+                d="M 15.25 18.75 L 22.75 14.75 L 22.75 33.25 L 15.25 29.25 Z"
                 stroke="currentColor"
-                strokeWidth={stroke}
+                strokeWidth={sw}
                 strokeLinejoin="round"
               />
               {muted ? (
                 <>
                   <path
-                    d="M26.75 17.25 35.75 30.75"
+                    d="M 27 16.5 L 36.25 31.5"
                     stroke="currentColor"
-                    strokeWidth={stroke}
+                    strokeWidth={sw}
                     strokeLinecap="round"
                   />
                   <path
-                    d="M35.75 17.25 26.75 30.75"
+                    d="M 36.25 16.5 L 27 31.5"
                     stroke="currentColor"
-                    strokeWidth={stroke}
+                    strokeWidth={sw}
                     strokeLinecap="round"
                   />
                 </>
               ) : (
                 <>
                   <path
-                    d="M 24.75 17.75 Q 28.5 24 24.75 30.25"
+                    d="M 25.25 17.5 Q 29.25 24 25.25 30.5"
                     stroke="currentColor"
-                    strokeWidth={stroke}
+                    strokeWidth={sw}
                     strokeLinecap="round"
                   />
                   <path
-                    d="M 28.25 15.25 Q 35.5 24 28.25 32.75"
+                    d="M 29 14.75 Q 36.25 24 29 33.25"
                     stroke="currentColor"
-                    strokeWidth={stroke}
+                    strokeWidth={sw}
                     strokeLinecap="round"
                   />
                 </>
