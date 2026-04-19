@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
-const SPLASH_VIDEO = '/sr-originals-splash.mp4'
+const SPLASH_VIDEO_DESKTOP = '/sr-originals-splash.mp4'
+const SPLASH_VIDEO_MOBILE = '/sr-originals-splash-mobile.mp4'
 const FALLBACK_IMG = '/sr-originals-splash-logo-bgremove.png'
 
 /**
- * Full-screen intro. One tap (“Enter our World”) unlocks unmuted playback (browser policy).
+ * Full-screen intro. One tap unlocks unmuted playback (browser policy).
  */
 export default function Intro({ onDone }) {
   const videoRef = useRef(null)
@@ -14,6 +16,13 @@ export default function Intro({ onDone }) {
   const [useFallback, setUseFallback] = useState(false)
   /** Must be true before we call play() — that gesture unlocks unmuted audio every time. */
   const [started, setStarted] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 767px)')
+  const [splashVideoSrc, setSplashVideoSrc] = useState(SPLASH_VIDEO_DESKTOP)
+
+  useEffect(() => {
+    if (started) return
+    setSplashVideoSrc(isMobile ? SPLASH_VIDEO_MOBILE : SPLASH_VIDEO_DESKTOP)
+  }, [isMobile, started])
 
   const clearSafety = () => {
     if (safetyTimerRef.current != null) {
@@ -97,7 +106,7 @@ export default function Intro({ onDone }) {
             <video
               ref={videoRef}
               className={`${videoShell} ${started ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
-              src={SPLASH_VIDEO}
+              src={splashVideoSrc}
               playsInline
               preload="auto"
               aria-label="SR Originals"
@@ -112,7 +121,7 @@ export default function Intro({ onDone }) {
           <button
             type="button"
             className="absolute inset-0 z-[110] flex cursor-pointer flex-col items-center justify-center bg-black px-6 md:px-0"
-            aria-label="Enter our World — start intro"
+            aria-label="Now playing. Let's go — start intro"
             onClick={startIntro}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -121,8 +130,13 @@ export default function Intro({ onDone }) {
               }
             }}
           >
-            <span className="font-[family-name:var(--font-display)] text-xl tracking-[0.12em] text-white/95 md:text-2xl">
-              Enter our World
+            <span className="flex flex-col items-center gap-2 text-center md:gap-3">
+              <span className="font-[family-name:var(--font-display)] text-sm uppercase tracking-[0.35em] text-white/55 md:text-base">
+                Now Playing.
+              </span>
+              <span className="font-[family-name:var(--font-display)] text-2xl tracking-wide text-white md:text-3xl">
+                Let&apos;s Go!
+              </span>
             </span>
           </button>
         )}
