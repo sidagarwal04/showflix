@@ -7,6 +7,9 @@ import { PLACEHOLDER_HERO_VIDEO_SRC } from '../data/mediaConfig'
 /** Mute-state glyph — `public/nav-mute-icon.png` (black art; forced white in CSS). */
 const HERO_MUTE_ICON_SRC = '/nav-mute-icon.png'
 
+/** Splash plays with sound when allowed; hero background stays muted until the user unmutes. */
+const HERO_DEFAULT_MUTED = true
+
 /**
  * Hero below static nav: fills `100dvh − nav` (match Navbar `h-[68px]` / `md:h-[70px]`).
  */
@@ -16,7 +19,7 @@ export default function Hero({
   onMoreInfo,
 }) {
   const videoRef = useRef(null)
-  const [muted, setMuted] = useState(true)
+  const [muted, setMuted] = useState(HERO_DEFAULT_MUTED)
 
   const youtubeId = useMemo(
     () => parseYoutubeVideoId(hero.youtubeUrl || hero.youtubeVideoId || ''),
