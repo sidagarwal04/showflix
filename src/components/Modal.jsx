@@ -63,7 +63,7 @@ export default function Modal({ state, onClose, onPrev, onNext }) {
             {state.kind === 'photo' && (
               <>
                 <img
-                  src={driveImageUrl(state.item.id)}
+                  src={driveImageUrl(state.item.id, 3200)}
                   alt={state.item.title}
                   className="mx-auto max-h-[85vh] w-auto max-w-full rounded object-contain shadow-2xl"
                 />
