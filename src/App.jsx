@@ -1,23 +1,14 @@
 import { useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Intro from './components/Intro'
-import { INTRO_STORAGE_KEY } from './constants/introStorage'
 import Layout from './components/Layout'
 import Home from './pages/Home'
 import BumpEra from './pages/BumpEra'
 import SprinkleSeason from './pages/SprinkleSeason'
 // import LittleMoments from './pages/LittleMoments' // enable when Little Moments goes live
 
-function shouldPlayIntro() {
-  try {
-    return localStorage.getItem(INTRO_STORAGE_KEY) !== '1'
-  } catch {
-    return false
-  }
-}
-
 export default function App() {
-  const [showIntro, setShowIntro] = useState(() => shouldPlayIntro())
+  const [showIntro, setShowIntro] = useState(true)
 
   return (
     <>
