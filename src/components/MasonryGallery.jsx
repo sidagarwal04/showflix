@@ -16,14 +16,26 @@ const FALLBACK_IMG =
 /**
  * Editorial masonry: cream panel, white hairline gutters, sharp corners.
  * Drive: `getGoogleDriveApiKey()` — in dev prefers `VITE_GOOGLE_DRIVE_API_KEY_LOCAL`.
+ *
+ * @param {string} [driveFolderId] — If set, used first (e.g. page-specific `VITE_*_FOLDER_ID` from env).
+ * @param {string} [sectionClassName] — Extra classes on the outer `<section>` (e.g. tighter top on standalone pages).
+ * @param {boolean} [restrictFolderToProps] — If true, do not fall back to `VITE_GOOGLE_DRIVE_FOLDER_ID` (standalone pages with their own env).
  */
-export default function MasonryGallery({ section, onOpenItem }) {
+export default function MasonryGallery({
+  section,
+  onOpenItem,
+  driveFolderId: driveFolderIdProp,
+  sectionClassName = '',
+  restrictFolderToProps = false,
+}) {
   const wide = useMediaQuery('(min-width: 768px)')
   const autoLayout = section.masonryLayout !== 'manual'
 
   const apiKey = getGoogleDriveApiKey()
-  const folderId =
-    import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID?.trim() || section.driveFolderId?.trim() || ''
+  const globalFolder = import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID?.trim() || ''
+  const folderId = restrictFolderToProps
+    ? driveFolderIdProp?.trim() || section.driveFolderId?.trim() || ''
+    : driveFolderIdProp?.trim() || section.driveFolderId?.trim() || globalFolder
   const shouldFetchDrive = Boolean(apiKey && folderId)
 
   const [loadState, setLoadState] = useState(() =>
@@ -120,7 +132,7 @@ export default function MasonryGallery({ section, onOpenItem }) {
   return (
     <section
       id={section.id}
-      className="scroll-mt-6 border-y border-black/5 bg-[#f4f0e8] py-10 text-[#2a2826] md:scroll-mt-8 md:py-14"
+      className={`scroll-mt-6 border-y border-black/5 bg-[#f4f0e8] py-10 text-[#2a2826] md:scroll-mt-8 md:py-14 ${sectionClassName}`.trim()}
     >
       <div className="mx-auto max-w-[1920px] px-4 md:px-10">
         {section.kicker && (

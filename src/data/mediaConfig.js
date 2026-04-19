@@ -123,28 +123,6 @@ export const mediaConfig = {
       ],
     },
     {
-      id: 'maternity-function',
-      title: '🪔 Maternity Function',
-      type: 'photo',
-      items: [
-        {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-          title: 'Ritual blessing',
-          description: 'Family gathered',
-        },
-        {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-          title: 'Colors',
-          description: 'Traditional decor',
-        },
-        {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-          title: 'Sweet moments',
-          description: 'Laughter and light',
-        },
-      ],
-    },
-    {
       id: 'little-moments',
       title: '✨ Little Moments',
       type: 'photo',
@@ -155,6 +133,22 @@ export const mediaConfig = {
           description: 'First smiles, tiny toes, and everyday magic.',
         },
       ],
+    },
+  ],
+}
+
+/** `/baby-shower` — masonry only; folder id from `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER`. */
+export const babyShowerGallerySection = {
+  id: 'baby-shower',
+  kicker: "Function photos — edited",
+  title: '🎉 Baby shower',
+  type: 'masonry',
+  masonryLayout: 'auto',
+  items: [
+    {
+      id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+      title: 'Placeholder',
+      description: 'Loads from Drive when API key + folder env are set.',
     },
   ],
 }
