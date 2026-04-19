@@ -35,17 +35,16 @@ export default function Hero({
   const embedSrc = youtubeId ? youtubeHeroEmbedUrl(youtubeId, { muted }) : null
 
   return (
-    <section className="relative h-[min(78vh,820px)] w-full overflow-hidden bg-black md:h-[min(88vh,900px)]">
+    <section className="relative h-[min(88vh,920px)] w-full overflow-hidden bg-black md:h-[min(96vh,1000px)]">
       {youtubeId ? (
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           {/*
-            True 16:9 “cover” for the hero box (avoids extra scale that crops unevenly).
-            Slight downward shift shows a bit more of the upper part of the frame when letterboxing kicks in.
+            16:9 cover + slight zoom so the frame fills more height (less letterboxing than raw min-h-full).
           */}
           <iframe
             key={muted ? 'muted' : 'unmuted'}
             title="Hero background video"
-            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none -translate-x-1/2 translate-y-[calc(-50%+clamp(0.5rem,2vh,2.5rem))] border-0"
+            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.12] -translate-x-1/2 translate-y-[calc(-50%+clamp(0.25rem,1.2vh,1.5rem))] border-0"
             src={embedSrc}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen={false}
@@ -125,22 +124,24 @@ export default function Hero({
         </motion.div>
       </div>
 
-      <button
-        type="button"
-        onClick={toggleMute}
-        className="absolute bottom-6 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-black/50 text-white backdrop-blur-md transition hover:bg-black/70 md:bottom-10 md:right-10"
-        aria-label={muted ? 'Unmute video' : 'Mute video'}
-      >
-        {muted ? (
-          <span className="text-lg" aria-hidden>
-            🔇
-          </span>
-        ) : (
-          <span className="text-lg" aria-hidden>
-            🔊
-          </span>
-        )}
-      </button>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 mx-auto flex max-w-[1920px] justify-end px-4 pb-6 md:px-10 md:pb-10">
+        <button
+          type="button"
+          onClick={toggleMute}
+          className="pointer-events-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/25 bg-black/50 text-white backdrop-blur-md transition hover:bg-black/70"
+          aria-label={muted ? 'Unmute video' : 'Mute video'}
+        >
+          {muted ? (
+            <span className="text-lg" aria-hidden>
+              🔇
+            </span>
+          ) : (
+            <span className="text-lg" aria-hidden>
+              🔊
+            </span>
+          )}
+        </button>
+      </div>
     </section>
   )
 }
