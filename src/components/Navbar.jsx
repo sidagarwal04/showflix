@@ -12,6 +12,9 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+/** Served from `public/sr-originals-logo.png` */
+const BRAND_LOGO_SRC = '/sr-originals-logo.png'
+
 export default function Navbar({ brandName = 'SIDFLIX' }) {
   const [solid, setSolid] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -45,10 +48,14 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
         <Link
           to="/"
           onClick={scrollToTop}
-          className="shrink-0 font-[family-name:var(--font-body)] text-2xl font-extrabold tracking-tight"
-          style={{ color: '#E50914' }}
+          className="shrink-0 py-0.5 transition-opacity hover:opacity-90"
         >
-          {brandName}
+          <img
+            src={BRAND_LOGO_SRC}
+            alt={brandName}
+            className="block h-7 w-auto md:h-8"
+            decoding="async"
+          />
         </Link>
 
         <nav className="scrollbar-hide flex max-w-[60vw] flex-1 justify-center gap-4 overflow-x-auto whitespace-nowrap px-1 md:max-w-none md:gap-8">
