@@ -1,5 +1,7 @@
 # SR Originals
 
+![SR Originals preview](public/SR%20Originals%20-%20Thumbnail.png)
+
 A Netflix-style family gallery for maternity and baby moments — hero video, carousels, and masonry grids backed by public Google Drive folders and optional YouTube embeds.
 
 ## Stack
