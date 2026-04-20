@@ -1,6 +1,6 @@
 # SR Originals
 
-![SR Originals preview](public/og-image.webp)
+![SR Originals preview](public/og-image.jpg)
 
 A Netflix-style family gallery for maternity and baby moments — hero video, carousels, and masonry grids backed by public Google Drive folders and optional YouTube embeds.
 
@@ -36,7 +36,7 @@ Copy [`.env.example`](.env.example) to `.env.local`. Summary:
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_SITE_URL` | Public site origin (`https://…`, no trailing slash). Set for production builds so Open Graph / X / LinkedIn get **absolute** image URLs (`og-image.webp`). On Netlify, `URL` is usually set at build time and is used if this is empty. |
+| `VITE_SITE_URL` | Public site origin (`https://…`, no trailing slash). Set for production builds so Open Graph / WhatsApp / X / LinkedIn get **absolute** image URLs (`og-image.jpg`). On Netlify, `URL` is usually set at build time and is used if this is empty. |
 | `VITE_GOOGLE_DRIVE_API_KEY` | Google API key with Drive access (production; can be used locally if referrer rules allow localhost). |
 | `VITE_GOOGLE_DRIVE_API_KEY_LOCAL` | Optional dev-only key so the production key can stay restricted to your host (e.g. Netlify). Used when set during `npm run dev`. |
 | `VITE_GOOGLE_DRIVE_FOLDER_ID` | Default folder for masonry galleries (e.g. home). |
