@@ -1,16 +1,70 @@
-# React + Vite
+# SR Originals
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Netflix-style family gallery for maternity and baby moments — hero video, carousels, and masonry grids backed by public Google Drive folders and optional YouTube embeds.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [React](https://react.dev/) 19 · [Vite](https://vite.dev/) 8
+- [React Router](https://reactrouter.com/) 7
+- [Tailwind CSS](https://tailwindcss.com/) 4 (via `@tailwindcss/vite`)
+- [Framer Motion](https://www.framer.com/motion/)
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 18+ (recommended: current LTS)
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+cp .env.example .env.local
+```
+
+Fill in `.env.local` as needed (see below), then:
+
+```bash
+npm run dev
+```
+
+The app runs at [http://localhost:5173](http://localhost:5173). Restart the dev server after changing env vars.
+
+## Environment variables
+
+Copy [`.env.example`](.env.example) to `.env.local`. Summary:
+
+| Variable | Purpose |
+| --- | --- |
+| `VITE_GOOGLE_DRIVE_API_KEY` | Google API key with Drive access (production; can be used locally if referrer rules allow localhost). |
+| `VITE_GOOGLE_DRIVE_API_KEY_LOCAL` | Optional dev-only key so the production key can stay restricted to your host (e.g. Netlify). Used when set during `npm run dev`. |
+| `VITE_GOOGLE_DRIVE_FOLDER_ID` | Default folder for masonry galleries (e.g. home). |
+| `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER` | Folder for the Sprinkle Season / baby shower page (`/sprinkle-season`). |
+
+In development, API calls can go through Vite’s `/googleapis` proxy (see `vite.config.js`).
+
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start dev server with HMR |
+| `npm run build` | Production build to `dist/` |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint |
+
+## Routes
+
+| Path | Page |
+| --- | --- |
+| `/` | Home |
+| `/bump-era` | Bump Era (alias: `/maternity` → `/bump-era`) |
+| `/sprinkle-season` | Sprinkle Season (alias: `/baby-shower` → `/sprinkle-season`) |
+
+Unknown paths redirect to `/`.
+
+## Content and configuration
+
+- **Copy and media IDs:** [`src/data/mediaConfig.js`](src/data/mediaConfig.js) documents how to swap hero video, carousels, and static Drive file IDs.
+- **Folder-based masonry:** Requires the Drive API key and folder env vars above.
+
+## License
+
+Private project (`"private": true` in `package.json`).
