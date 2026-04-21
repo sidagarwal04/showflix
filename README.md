@@ -2,7 +2,60 @@
 
 ![SR Originals preview](public/og-image.jpg)
 
-A Netflix-style family gallery for maternity and baby moments — hero video, carousels, and masonry grids backed by public Google Drive folders and optional YouTube embeds.
+A Netflix-style family gallery — hero video, carousels, and masonry grids. Images are loaded through a **Cloudflare Worker** that proxies and caches Google Drive files (see below). Optional **YouTube** embed for the hero.
+
+## Why a Worker instead of direct Drive links?
+
+Google Drive is not a CDN: hotlinking thumbnails at scale often hits **429** rate limits. This setup treats Drive as the **source of truth** (you keep organizing files there) while visitors load images from **Cloudflare’s cache**:
+
+```text
+Browser → Cloudflare Worker (edge cache hit) → Google Drive only on cache miss
+```
+
+The Worker also keeps your **Google API key on the server** (Worker secrets), not in the React bundle.
+
+## Cloudflare Worker
+
+The reference implementation lives in **[`workers/drive-image-proxy.js`](workers/drive-image-proxy.js)**. Deploy it in [Cloudflare Workers](https://workers.cloudflare.com/) (dashboard: create Worker → paste → deploy, or use [Wrangler](https://developers.cloudflare.com/workers/wrangler/)).
+
+### Worker configuration (secrets / variables)
+
+| Name | Purpose |
+| --- | --- |
+| `GOOGLE_API_KEY` | Google Cloud API key with **Google Drive API** enabled. Restrict the key to Drive API and (optionally) IP / usage quotas. |
+| `FOLDER_ID` | Primary album folder (Bump Era / home gallery). |
+| `FOLDER_ID_2` | Second album (e.g. Sprinkle Season). Omit if you only use one folder. |
+
+Folders should be shared so files are readable with the API key (e.g. **Anyone with the link** as needed for your setup).
+
+### HTTP API (what the React app expects)
+
+| Request | Behavior |
+| --- | --- |
+| `GET /list` | JSON array of `{ id, name }` for `FOLDER_ID`. |
+| `GET /list?folder=2` | Same for `FOLDER_ID_2`. |
+| `GET /{filename}?size=thumb` | Thumbnail via Google’s thumbnail CDN (`sz=w800`). |
+| `GET /{filename}` | Full image via Drive `files.get` + `alt=media`. |
+| `GET /{filename}?folder=2&size=thumb` | Thumbnail in the second folder. |
+| `GET /{filename}?folder=2` | Full image in the second folder. |
+
+Responses set `Access-Control-Allow-Origin: *` so your Netlify (or any) origin can fetch them. List responses are cached ~5 minutes; images ~1 day browser / ~7 days edge (see Worker headers).
+
+### Frontend mapping
+
+- Default Worker host is set in [`src/components/MasonryGallery.jsx`](src/components/MasonryGallery.jsx) (override with `VITE_DRIVE_IMAGE_PROXY_URL`).
+- [`src/data/mediaConfig.js`](src/data/mediaConfig.js): Bump Era uses the default folder; **Sprinkle Season** sets `driveImageProxyFolder: '2'` so URLs include `?folder=2`.
+- URL building and filters: [`src/services/driveImageProxy.js`](src/services/driveImageProxy.js).
+
+**Workflow:** add photos to the Drive folder → after the list cache expires (minutes), refresh the site; no redeploy required for new filenames.
+
+### If this repo is only the frontend
+
+Keep **`workers/drive-image-proxy.js`** as documentation or copy it into your Cloudflare account. The Worker does not run during `npm run build`; it is deployed separately from Netlify.
+
+### Alternatives (longer term)
+
+If the library grows or you want zero Drive traffic from visitors: mirror Drive to **R2 / object storage** on a schedule (e.g. **rclone** + cron or GitHub Actions), or use another host-only image pipeline. The Worker approach above is the lightest path that keeps Drive as the editor.
 
 ## Stack
 
@@ -19,30 +72,23 @@ A Netflix-style family gallery for maternity and baby moments — hero video, ca
 
 ```bash
 npm install
-cp .env.example .env.local
-```
-
-Fill in `.env.local` as needed (see below), then:
-
-```bash
 npm run dev
 ```
 
-The app runs at [http://localhost:5173](http://localhost:5173). Restart the dev server after changing env vars.
+The app runs at [http://localhost:5173](http://localhost:5173).
 
-## Environment variables
+No `.env` file is required. Defaults include the Worker base URL in code; override in [`src/data/mediaConfig.js`](src/data/mediaConfig.js) (`driveImageProxyBase`, `driveImageProxyFolder`) if you fork this template.
 
-Copy [`.env.example`](.env.example) to `.env.local`. Summary:
+## Optional environment variables
+
+Only if you need overrides (e.g. different Worker URL per deploy without editing code):
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_SITE_URL` | Public site origin (`https://…`, no trailing slash). Set for production builds so Open Graph / WhatsApp / X / LinkedIn get **absolute** image URLs (`og-image.jpg`). On Netlify, `URL` is usually set at build time and is used if this is empty. |
-| `VITE_GOOGLE_DRIVE_API_KEY` | Google API key with Drive access (production; can be used locally if referrer rules allow localhost). |
-| `VITE_GOOGLE_DRIVE_API_KEY_LOCAL` | Optional dev-only key so the production key can stay restricted to your host (e.g. Netlify). Used when set during `npm run dev`. |
-| `VITE_GOOGLE_DRIVE_FOLDER_ID` | Default folder for masonry galleries (e.g. home). |
-| `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER` | Folder for the Sprinkle Season / baby shower page (`/sprinkle-season`). |
+| `VITE_SITE_URL` | Public site origin (`https://…`, no trailing slash) for Open Graph / social preview absolute URLs in `index.html`. **Netlify sets `URL` at build time** — the Vite plugin uses `VITE_SITE_URL` or `URL`, so you usually do **not** need to set anything. |
+| `VITE_DRIVE_IMAGE_PROXY_URL` | Override the Worker origin (defaults in [`MasonryGallery`](src/components/MasonryGallery.jsx)). |
 
-In development, API calls can go through Vite’s `/googleapis` proxy (see `vite.config.js`).
+Create a local `.env` or `.env.local` if you use these (both are gitignored). **You can remove any old Netlify variables** such as `VITE_GOOGLE_DRIVE_API_KEY`, `VITE_GOOGLE_DRIVE_FOLDER_ID`, or related keys — the app no longer uses the Google Drive client API for galleries.
 
 ## Scripts
 
@@ -65,9 +111,10 @@ Unknown paths redirect to `/`.
 
 ## Content and configuration
 
-- **Copy and media IDs:** [`src/data/mediaConfig.js`](src/data/mediaConfig.js) documents how to swap hero video, carousels, and static Drive file IDs.
-- **Folder-based masonry:** Requires the Drive API key and folder env vars above.
+- **Hero, section copy, second-folder flag:** [`src/data/mediaConfig.js`](src/data/mediaConfig.js)
+- **Fetch `/list`, build `imageSrc` / `thumbnailSrc`:** [`src/services/driveImageProxy.js`](src/services/driveImageProxy.js)
+- **Worker source (deploy on Cloudflare):** [`workers/drive-image-proxy.js`](workers/drive-image-proxy.js)
 
 ## License
 
-Private project (`"private": true` in `package.json`).
+Private project (`"private": true` in `package.json`). Change the license in `package.json` if you publish this template openly.
