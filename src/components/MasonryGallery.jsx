@@ -1,26 +1,39 @@
 import { startTransition, useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { galleryItemImageSrc, onDriveImageError, STATIC_IMG_FALLBACK } from '../utils/driveUrls'
+import { galleryThumbnailSrc, onDriveImageError, STATIC_IMG_FALLBACK } from '../utils/driveUrls'
+import {
+  autoGridPlacement,
+  computeMasonryDisplayOrder,
+  getImageOrientation,
+  loadingGridPlacement,
+} from '../utils/masonryLayout'
+import { useMediaQuery } from '../hooks/useMediaQuery'
+import { fetchDriveProxyImageList } from '../services/driveImageProxy.js'
 
-/** Spreads Drive thumbnail requests over time to reduce googleusercontent 429s. */
+/** Default Worker base; override with `VITE_DRIVE_IMAGE_PROXY_URL` or `section.driveImageProxyBase`. */
+const DEFAULT_DRIVE_IMAGE_PROXY_URL = 'https://drive-image-proxy.sidaxy.workers.dev'
+
+/** Spreads thumbnail requests slightly when not using explicit imageSrc (legacy). */
 const MASONRY_DRIVE_THUMB_W = 1024
 const IMG_TRANSPARENT_PIXEL =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
 
 function MasonryItemImage({ item, visualIndex, className, onImgLoad, onImgError }) {
-  const direct = typeof item.imageSrc === 'string' && item.imageSrc.trim()
+  const hasGridUrl =
+    (typeof item.thumbnailSrc === 'string' && item.thumbnailSrc.trim()) ||
+    (typeof item.imageSrc === 'string' && item.imageSrc.trim())
   const [src, setSrc] = useState(() =>
-    direct ? galleryItemImageSrc(item, MASONRY_DRIVE_THUMB_W) : IMG_TRANSPARENT_PIXEL,
+    hasGridUrl ? galleryThumbnailSrc(item, MASONRY_DRIVE_THUMB_W) : IMG_TRANSPARENT_PIXEL,
   )
 
   useEffect(() => {
-    if (direct) return undefined
+    if (hasGridUrl) return undefined
     const ms = Math.min(visualIndex * 140, 3000)
     const timer = window.setTimeout(() => {
-      setSrc(galleryItemImageSrc(item, MASONRY_DRIVE_THUMB_W))
+      setSrc(galleryThumbnailSrc(item, MASONRY_DRIVE_THUMB_W))
     }, ms)
     return () => clearTimeout(timer)
-  }, [visualIndex, direct, item.id, item.imageSrc])
+  }, [visualIndex, hasGridUrl, item.id, item.imageSrc, item.thumbnailSrc])
 
   return (
     <img
@@ -38,55 +51,36 @@ function MasonryItemImage({ item, visualIndex, className, onImgLoad, onImgError 
     />
   )
 }
-import {
-  autoGridPlacement,
-  computeMasonryDisplayOrder,
-  getImageOrientation,
-  loadingGridPlacement,
-} from '../utils/masonryLayout'
-import { useMediaQuery } from '../hooks/useMediaQuery'
-import { fetchDriveFolderImageFiles } from '../services/googleDrive'
-import { getGoogleDriveApiKey } from '../utils/googleDriveEnv.js'
 
 /**
  * Editorial masonry: cream panel, white hairline gutters, sharp corners.
- * Drive: `getGoogleDriveApiKey()` — in dev prefers `VITE_GOOGLE_DRIVE_API_KEY_LOCAL`.
- *
- * @param {string} [driveFolderId] — If set, used first (e.g. page-specific `VITE_*_FOLDER_ID` from env).
- * @param {string} [sectionClassName] — Extra classes on the outer `<section>` (e.g. tighter top on standalone pages).
- * @param {boolean} [restrictFolderToProps] — If true, do not fall back to `VITE_GOOGLE_DRIVE_FOLDER_ID` (standalone pages with their own env).
+ * Images load from Cloudflare Worker proxy (`GET /list` + `GET /{filename}`).
  */
 export default function MasonryGallery({
   section,
   onOpenItem,
-  driveFolderId: driveFolderIdProp,
+  driveFolderId: _driveFolderIdProp,
   sectionClassName = '',
-  restrictFolderToProps = false,
+  restrictFolderToProps: _restrictFolderToProps = false,
 }) {
   const wide = useMediaQuery('(min-width: 768px)')
   const autoLayout = section.masonryLayout !== 'manual'
 
-  const apiKey = getGoogleDriveApiKey()
-  const globalFolder = import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID?.trim() || ''
-  const folderId = restrictFolderToProps
-    ? driveFolderIdProp?.trim() || section.driveFolderId?.trim() || ''
-    : driveFolderIdProp?.trim() || section.driveFolderId?.trim() || globalFolder
-  const shouldFetchDrive = Boolean(apiKey && folderId)
+  const proxyBase = useMemo(() => {
+    const fromSection = typeof section.driveImageProxyBase === 'string' ? section.driveImageProxyBase.trim() : ''
+    const fromEnv = import.meta.env.VITE_DRIVE_IMAGE_PROXY_URL?.trim() || ''
+    return fromSection || fromEnv || DEFAULT_DRIVE_IMAGE_PROXY_URL
+  }, [section.driveImageProxyBase])
 
-  const [loadState, setLoadState] = useState(() =>
-    shouldFetchDrive ? { status: 'loading' } : { status: 'idle' },
-  )
+  const [loadState, setLoadState] = useState(() => ({ status: 'loading' }))
 
-  /** Natural sizes when Drive omits metadata — keyed by file id for stable order when using `masonryRhythm`. */
+  /** Natural sizes when metadata is measured client-side — keyed by file id for stable order when using `masonryRhythm`. */
   const [measuredById, setMeasuredById] = useState({})
 
   useEffect(() => {
-    if (!shouldFetchDrive) return undefined
     let cancelled = false
     startTransition(() => setLoadState({ status: 'loading' }))
-    fetchDriveFolderImageFiles(folderId, apiKey, {
-      orderBy: section.driveListOrderBy || 'name',
-    })
+    fetchDriveProxyImageList(proxyBase)
       .then((items) => {
         if (!cancelled) {
           startTransition(() => {
@@ -101,15 +95,13 @@ export default function MasonryGallery({
     return () => {
       cancelled = true
     }
-  }, [shouldFetchDrive, folderId, apiKey, section.driveListOrderBy])
+  }, [proxyBase])
 
   const effectiveItems = useMemo(() => {
-    const fallback = section.items ?? []
-    if (!shouldFetchDrive) return fallback
     if (loadState.status === 'ready') return loadState.items ?? []
-    if (loadState.status === 'error') return fallback
+    if (loadState.status === 'error') return section.items ?? []
     return []
-  }, [shouldFetchDrive, loadState, section.items])
+  }, [loadState, section.items])
 
   const sectionForModal = useMemo(
     () => ({ ...section, items: effectiveItems }),
@@ -173,10 +165,9 @@ export default function MasonryGallery({
     return 'aspect-square'
   }
 
-  const showLoading = shouldFetchDrive && loadState.status === 'loading'
-  const showError = shouldFetchDrive && loadState.status === 'error'
-  const showEmpty =
-    shouldFetchDrive && loadState.status === 'ready' && effectiveItems.length === 0
+  const showLoading = loadState.status === 'loading'
+  const showError = loadState.status === 'error'
+  const showEmpty = loadState.status === 'ready' && effectiveItems.length === 0
 
   return (
     <section
@@ -198,12 +189,12 @@ export default function MasonryGallery({
         )}
         {showError && (
           <p className="mb-6 font-[family-name:var(--font-body)] text-sm text-red-800/90">
-            Could not load photos from Drive. Showing backup list from config if available.
+            Could not load photos. Showing backup list from config if available.
           </p>
         )}
         {showEmpty && (
           <p className="mb-6 font-[family-name:var(--font-body)] text-sm text-black/50">
-            No images found in this folder.
+            No images found.
           </p>
         )}
 

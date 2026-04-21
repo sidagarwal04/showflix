@@ -26,6 +26,13 @@ export function galleryItemImageSrc(item, maxWidth = 2400) {
   return driveImageUrl(item?.id, maxWidth)
 }
 
+/** Grid tiles: `thumbnailSrc` (e.g. Worker `?size=thumb`) when set; else same as `galleryItemImageSrc`. */
+export function galleryThumbnailSrc(item, maxWidth = 2400) {
+  const thumb = typeof item?.thumbnailSrc === 'string' ? item.thumbnailSrc.trim() : ''
+  if (thumb) return thumb
+  return galleryItemImageSrc(item, maxWidth)
+}
+
 /** Last-resort image when Drive embeds fail. */
 export const STATIC_IMG_FALLBACK =
   'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&w=1200&q=80'

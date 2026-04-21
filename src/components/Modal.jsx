@@ -66,6 +66,8 @@ export default function Modal({ state, onClose, onPrev, onNext }) {
                   src={galleryItemImageSrc(state.item, 1920)}
                   alt={`Photo ${state.index + 1} of ${state.total}`}
                   className="mx-auto max-h-[85vh] w-auto max-w-full rounded object-contain shadow-2xl"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => onDriveImageError(e, state.item, STATIC_IMG_FALLBACK)}
                 />
                 <div className="mt-4 text-center">

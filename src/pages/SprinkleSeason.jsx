@@ -5,10 +5,9 @@ import { sprinkleSeasonGallerySection } from '../data/mediaConfig'
 
 /**
  * `/sprinkle-season` — standalone gallery (Bump Era–style heading + masonry).
- * Folder: `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER` (see `.env.example`).
+ * Images from Cloudflare Worker (`VITE_DRIVE_IMAGE_PROXY_URL` or default base URL).
  */
 export default function SprinkleSeason() {
-  const folderId = import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER?.trim() || ''
   const section = useMemo(() => sprinkleSeasonGallerySection, [])
 
   const [modal, setModal] = useState(null)
@@ -43,8 +42,6 @@ export default function SprinkleSeason() {
     <main className="min-h-screen bg-[#141414] pb-20">
       <MasonryGallery
         section={section}
-        driveFolderId={folderId}
-        restrictFolderToProps
         onOpenItem={openFromGallery}
         sectionClassName="!border-t-0 pt-5 md:pt-7"
       />

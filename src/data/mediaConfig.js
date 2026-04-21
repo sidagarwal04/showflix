@@ -1,23 +1,10 @@
 /**
- * SR Originals — media manifest (Google Drive public links + optional YouTube hero)
+ * SR Originals — media manifest (Worker image proxy + optional YouTube hero)
  * ---------------------------------------------------------------------------
- * HOW TO UPDATE
- * 1. Upload photos/videos to Google Drive.
- * 2. Share each file: "Anyone with the link" → Viewer.
- * 3. Copy the FILE_ID from the share URL:
- *    https://drive.google.com/file/d/FILE_ID/view
- *    or from: https://drive.google.com/open?id=FILE_ID
- * 4. Paste ids into `videoId` / `items[].id`, OR use Drive API folder mode for masonry:
- *    set `VITE_GOOGLE_DRIVE_API_KEY` and `VITE_GOOGLE_DRIVE_FOLDER_ID` in `.env.local` / Netlify (see `.env.example`).
- * 5. Optional `items[].imageSrc`: full URL or `/public` path (e.g. `/og-image.jpg`) for a tile. When set, it
- *    overrides Drive thumbnails. Prefer local `/…` assets for dev to avoid third-party rate limits (429).
+ * Masonry galleries load images from the Cloudflare Worker (`GET /list` + `GET /{filename}`).
+ * Set `VITE_DRIVE_IMAGE_PROXY_URL` or `section.driveImageProxyBase` (see MasonryGallery).
  *
- * URL formats used in the app:
- *   Images:  https://drive.google.com/uc?export=view&id=FILE_ID
- *   Video embed (iframe): https://drive.google.com/file/d/FILE_ID/preview
- *
- * PLACEHOLDER IDS: Sample public assets / short clips so the UI works before
- * you swap in real family media. Replace every id with your own.
+ * Hero video when not using YouTube: optional Drive `videoId` or placeholder MP4.
  */
 
 /** Public sample MP4 (W3C test asset) — swap for your Drive `videoId` in production. */
@@ -83,55 +70,8 @@ export const mediaConfig = {
       title: "🔥 Bump Era - Director's Cut",
       type: 'masonry',
       masonryLayout: 'auto',
-      /** Fallback when API key is missing or fetch fails; Drive folder comes from env only (`VITE_GOOGLE_DRIVE_FOLDER_ID`). */
-      items: [
-        {
-          id: 'demo-bump-1',
-          imageSrc: '/og-image.jpg',
-          title: 'Frame 1',
-          description: 'Swap for Drive: set `id` to your file id and remove `imageSrc`.',
-        },
-        {
-          id: 'demo-bump-2',
-          imageSrc: '/og-image.webp',
-          title: 'Frame 2',
-        },
-        {
-          id: 'demo-bump-3',
-          imageSrc: '/baby-footprints.png',
-          title: 'Frame 3',
-        },
-        {
-          id: 'demo-bump-4',
-          imageSrc: '/feet-favicon.png',
-          title: 'Frame 4',
-        },
-        {
-          id: 'demo-bump-5',
-          imageSrc: '/sr-originals-logo.png',
-          title: 'Frame 5',
-        },
-        {
-          id: 'demo-bump-6',
-          imageSrc: '/nav-mute-icon.png',
-          title: 'Frame 6',
-        },
-        {
-          id: 'demo-bump-7',
-          imageSrc: '/favicon.svg',
-          title: 'Frame 7',
-        },
-        {
-          id: 'demo-bump-8',
-          imageSrc: '/icons.svg',
-          title: 'Frame 8',
-        },
-        {
-          id: 'demo-bump-9',
-          imageSrc: '/og-image.jpg',
-          title: 'Frame 9',
-        },
-      ],
+      /** Fallback if `/list` fails (normally populated from the Worker). */
+      items: [],
     },
     /*
      * ✨ Little Moments — uncomment when this section is ready.
@@ -152,21 +92,12 @@ export const mediaConfig = {
   ],
 }
 
-/** `/sprinkle-season` — masonry only; folder id from `VITE_GOOGLE_DRIVE_FOLDER_ID_BABY_SHOWER`. */
+/** `/sprinkle-season` — masonry; same Worker `/list` as home unless `driveImageProxyBase` is set. */
 export const sprinkleSeasonGallerySection = {
   id: 'sprinkle-season',
   kicker: "The guest list, on film",
   title: "🎀 Sprinkle Season · The Preview Cut",
   type: 'masonry',
   masonryLayout: 'auto',
-  /** Matches Drive web “Name” order: natural sort so `…2.jpg` comes before `…10.jpg` (plain `name` does not). */
-  driveListOrderBy: 'name_natural',
-  items: [
-    {
-      id: 'demo-sprinkle-1',
-      imageSrc: '/og-image.jpg',
-      title: 'Placeholder',
-      description: 'Loads from Drive when API key + folder env are set.',
-    },
-  ],
+  items: [],
 }
