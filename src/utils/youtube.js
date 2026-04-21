@@ -38,7 +38,7 @@ export function youtubeHeroEmbedUrl(videoId, { muted = true } = {}) {
   return `https://www.youtube.com/embed/${videoId}?${params.toString()}`
 }
 
-/** Fullscreen “Play” modal: autoplay with controls. */
+/** Fullscreen “Play” modal: autoplay with controls + loop (playlist must match id for single-video loop). */
 export function youtubeModalEmbedUrl(videoId) {
   const params = new URLSearchParams({
     autoplay: '1',
@@ -46,6 +46,8 @@ export function youtubeModalEmbedUrl(videoId) {
     rel: '0',
     modestbranding: '1',
     playsinline: '1',
+    loop: '1',
+    playlist: videoId,
   })
   return `https://www.youtube.com/embed/${videoId}?${params.toString()}`
 }
