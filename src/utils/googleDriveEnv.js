@@ -1,5 +1,5 @@
 /**
- * Picks which Google API key to use for Drive (list + image `alt=media`).
+ * Picks which Google API key to use for Drive `files.list` (folder galleries).
  *
  * - **Production:** only `VITE_GOOGLE_DRIVE_API_KEY` (set on Netlify).
  * - **Local dev (`npm run dev`):** if `VITE_GOOGLE_DRIVE_API_KEY_LOCAL` is set, use it so you can

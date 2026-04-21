@@ -9,6 +9,8 @@
  *    or from: https://drive.google.com/open?id=FILE_ID
  * 4. Paste ids into `videoId` / `items[].id`, OR use Drive API folder mode for masonry:
  *    set `VITE_GOOGLE_DRIVE_API_KEY` and `VITE_GOOGLE_DRIVE_FOLDER_ID` in `.env.local` / Netlify (see `.env.example`).
+ * 5. Optional `items[].imageSrc`: full URL or `/public` path (e.g. `/og-image.jpg`) for a tile. When set, it
+ *    overrides Drive thumbnails. Prefer local `/…` assets for dev to avoid third-party rate limits (429).
  *
  * URL formats used in the app:
  *   Images:  https://drive.google.com/uc?export=view&id=FILE_ID
@@ -84,40 +86,49 @@ export const mediaConfig = {
       /** Fallback when API key is missing or fetch fails; Drive folder comes from env only (`VITE_GOOGLE_DRIVE_FOLDER_ID`). */
       items: [
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-1',
+          imageSrc: '/og-image.jpg',
           title: 'Frame 1',
-          description: 'Replace id with your Drive file id',
+          description: 'Swap for Drive: set `id` to your file id and remove `imageSrc`.',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-2',
+          imageSrc: '/og-image.webp',
           title: 'Frame 2',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-3',
+          imageSrc: '/baby-footprints.png',
           title: 'Frame 3',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-4',
+          imageSrc: '/feet-favicon.png',
           title: 'Frame 4',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-5',
+          imageSrc: '/sr-originals-logo.png',
           title: 'Frame 5',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-6',
+          imageSrc: '/nav-mute-icon.png',
           title: 'Frame 6',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-7',
+          imageSrc: '/favicon.svg',
           title: 'Frame 7',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-8',
+          imageSrc: '/icons.svg',
           title: 'Frame 8',
         },
         {
-          id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+          id: 'demo-bump-9',
+          imageSrc: '/og-image.jpg',
           title: 'Frame 9',
         },
       ],
@@ -152,7 +163,8 @@ export const sprinkleSeasonGallerySection = {
   driveListOrderBy: 'name_natural',
   items: [
     {
-      id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+      id: 'demo-sprinkle-1',
+      imageSrc: '/og-image.jpg',
       title: 'Placeholder',
       description: 'Loads from Drive when API key + folder env are set.',
     },

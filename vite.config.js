@@ -16,7 +16,10 @@ function htmlAbsoluteSiteUrl() {
       handler(html) {
         const raw = process.env.VITE_SITE_URL || process.env.URL || ''
         const base = typeof raw === 'string' ? raw.trim().replace(/\/$/, '') : ''
-        return html.replaceAll('__SITE_URL__', base)
+        // Empty base would turn `href="__SITE_URL__/"` into `href="/"`. Vite's build-html then
+        // resolves "/" as the project directory and throws EISDIR when reading it as a file.
+        const safe = base || 'https://localhost'
+        return html.replaceAll('__SITE_URL__', safe)
       },
     },
   }

@@ -1,6 +1,43 @@
 import { startTransition, useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { driveAltMediaUrl, driveImageUrl } from '../utils/driveUrls'
+import { galleryItemImageSrc, onDriveImageError, STATIC_IMG_FALLBACK } from '../utils/driveUrls'
+
+/** Spreads Drive thumbnail requests over time to reduce googleusercontent 429s. */
+const MASONRY_DRIVE_THUMB_W = 1024
+const IMG_TRANSPARENT_PIXEL =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+
+function MasonryItemImage({ item, visualIndex, className, onImgLoad, onImgError }) {
+  const direct = typeof item.imageSrc === 'string' && item.imageSrc.trim()
+  const [src, setSrc] = useState(() =>
+    direct ? galleryItemImageSrc(item, MASONRY_DRIVE_THUMB_W) : IMG_TRANSPARENT_PIXEL,
+  )
+
+  useEffect(() => {
+    if (direct) return undefined
+    const ms = Math.min(visualIndex * 140, 3000)
+    const timer = window.setTimeout(() => {
+      setSrc(galleryItemImageSrc(item, MASONRY_DRIVE_THUMB_W))
+    }, ms)
+    return () => clearTimeout(timer)
+  }, [visualIndex, direct, item.id, item.imageSrc])
+
+  return (
+    <img
+      src={src}
+      alt=""
+      className={className}
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
+      onLoad={(e) => {
+        if (e.currentTarget.naturalWidth <= 2) return
+        onImgLoad(item, e)
+      }}
+      onError={onImgError}
+    />
+  )
+}
 import {
   autoGridPlacement,
   computeMasonryDisplayOrder,
@@ -10,9 +47,6 @@ import {
 import { useMediaQuery } from '../hooks/useMediaQuery'
 import { fetchDriveFolderImageFiles } from '../services/googleDrive'
 import { getGoogleDriveApiKey } from '../utils/googleDriveEnv.js'
-
-const FALLBACK_IMG =
-  'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&w=1200&q=80'
 
 /**
  * Editorial masonry: cream panel, white hairline gutters, sharp corners.
@@ -201,28 +235,12 @@ export default function MasonryGallery({
                       })
                     }
                   >
-                    <img
-                      src={driveImageUrl(item.id)}
-                      alt=""
+                    <MasonryItemImage
+                      item={item}
+                      visualIndex={visualIndex}
                       className="h-full w-full object-cover transition duration-500 group-hover:brightness-[0.97]"
-                      loading="lazy"
-                      onLoad={(e) => onImgLoad(item, e)}
-                      onError={(e) => {
-                        const el = e.currentTarget
-                        if (el.dataset.driveFallback === 'alt') {
-                          el.onerror = null
-                          el.src = FALLBACK_IMG
-                          return
-                        }
-                        const alt = driveAltMediaUrl(item.id)
-                        if (alt) {
-                          el.dataset.driveFallback = 'alt'
-                          el.src = alt
-                          return
-                        }
-                        el.onerror = null
-                        el.src = FALLBACK_IMG
-                      }}
+                      onImgLoad={onImgLoad}
+                      onImgError={(e) => onDriveImageError(e, item, STATIC_IMG_FALLBACK)}
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
                   </motion.button>

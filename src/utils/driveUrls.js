@@ -5,17 +5,11 @@
  * “Anyone with the link” shares. No API key in the URL (avoids 403s from key restrictions and
  * keeps the key out of DevTools for every image).
  *
- * **`alt=media`:** `driveAltMediaUrl()` — full file bytes; optional fallback when thumbnails fail.
- * Can still return 403 if the key or sharing setup is wrong.
+ * **`<img>` on error:** use a static placeholder. We do not chain `uc?export=view` (often 403 when hotlinking)
+ * or `files.get` + `alt=media` (403 with API keys in the browser).
  */
 
-import { getGoogleDriveApiKey } from './googleDriveEnv.js'
-
-const GOOGLE_APIS_ORIGIN = 'https://www.googleapis.com'
-
-/**
- * Resized image via Drive’s thumbnail endpoint (good default for gallery + modals).
- */
+/** Resized image via Drive’s thumbnail endpoint (good default for gallery + modals). */
 export function driveImageUrl(fileId, maxWidth = 2400) {
   if (!fileId) return ''
   const w = Math.min(Math.max(Number(maxWidth) || 2400, 200), 4096)
@@ -23,14 +17,24 @@ export function driveImageUrl(fileId, maxWidth = 2400) {
 }
 
 /**
- * Full file via Drive REST `files.get` + `alt=media`. Use as fallback only; requires API key.
+ * Masonry / cards / modal: optional `item.imageSrc` (full https URL) overrides Drive `item.id`.
+ * Use for non-Drive placeholders so the grid does not request the same thumbnail many times (429).
  */
-export function driveAltMediaUrl(fileId, apiKeyOverride) {
-  if (!fileId) return ''
-  const key =
-    (apiKeyOverride && String(apiKeyOverride).trim()) || getGoogleDriveApiKey() || ''
-  if (!key) return ''
-  return `${GOOGLE_APIS_ORIGIN}/drive/v3/files/${encodeURIComponent(fileId)}?alt=media&key=${encodeURIComponent(key.trim())}`
+export function galleryItemImageSrc(item, maxWidth = 2400) {
+  const direct = typeof item?.imageSrc === 'string' ? item.imageSrc.trim() : ''
+  if (direct) return direct
+  return driveImageUrl(item?.id, maxWidth)
+}
+
+/** Last-resort image when Drive embeds fail. */
+export const STATIC_IMG_FALLBACK =
+  'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&w=1200&q=80'
+
+/** One-shot fallback — do not chain other Drive URLs (403/429). */
+export function onDriveImageError(e, _item, finalFallback = STATIC_IMG_FALLBACK) {
+  const el = e.currentTarget
+  el.onerror = null
+  el.src = finalFallback
 }
 
 export function driveVideoPreviewUrl(fileId) {
