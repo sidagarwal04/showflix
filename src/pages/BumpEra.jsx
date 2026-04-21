@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import Home from './Home'
 
 /**
- * `/bump-era` — scrolls to the maternity shoot masonry on Home.
+ * `/bump-era` — scrolls to the maternity shoot masonry on Home (Back to top lives in `Home`).
  */
 export default function BumpEra() {
   useEffect(() => {

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import BackToTop from '../components/BackToTop'
 import MasonryGallery from '../components/MasonryGallery'
 import Modal from '../components/Modal'
 import { sprinkleSeasonGallerySection } from '../data/mediaConfig'
@@ -45,6 +46,8 @@ export default function SprinkleSeason() {
         onOpenItem={openFromGallery}
         sectionClassName="!border-t-0 pt-5 md:pt-7"
       />
+
+      <BackToTop />
 
       <Modal
         state={modal}

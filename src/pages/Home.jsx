@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import BackToTop from '../components/BackToTop'
 import Hero from '../components/Hero'
 import CarouselRow from '../components/Carousel'
 import MasonryGallery from '../components/MasonryGallery'
@@ -95,6 +96,8 @@ export default function Home() {
           ),
         )}
       </div>
+
+      <BackToTop />
 
       <Modal
         state={modal}
