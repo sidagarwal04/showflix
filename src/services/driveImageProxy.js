@@ -21,13 +21,38 @@ function encodePathForProxy(name) {
     .join('/')
 }
 
+/** @returns {string | null} trimmed folder id for query params, or null to omit */
+function normalizeFolderParam(folder) {
+  if (folder === undefined || folder === null) return null
+  const s = String(folder).trim()
+  return s === '' ? null : s
+}
+
+/** Full-size image URL: `/{name}` or `/{name}?folder=n` */
+function proxyFileUrl(base, name, folder) {
+  const path = `${base.replace(/\/$/, '')}/${encodePathForProxy(name)}`
+  const f = normalizeFolderParam(folder)
+  if (!f) return path
+  return `${path}?folder=${encodeURIComponent(f)}`
+}
+
+/** Thumbnail: `?size=thumb` or `?folder=n&size=thumb` */
+function proxyThumbnailUrl(fileUrl) {
+  const sep = fileUrl.includes('?') ? '&' : '?'
+  return `${fileUrl}${sep}size=thumb`
+}
+
 /**
  * @param {string} baseUrl e.g. https://drive-image-proxy.sidaxy.workers.dev
+ * @param {{ folder?: string | number }} [options] — e.g. `{ folder: 2 }` → `/list?folder=2` and `/{name}?folder=2`
  * @returns {Promise<Array<{ id: string, name: string, title: string, description: string, imageSrc: string, thumbnailSrc: string }>>}
  */
-export async function fetchDriveProxyImageList(baseUrl) {
+export async function fetchDriveProxyImageList(baseUrl, options = {}) {
   const base = baseUrl.replace(/\/$/, '')
-  const res = await fetch(`${base}/list`)
+  const folder = options.folder
+  const f = normalizeFolderParam(folder)
+  const listUrl = f ? `${base}/list?folder=${encodeURIComponent(f)}` : `${base}/list`
+  const res = await fetch(listUrl)
   if (!res.ok) {
     const text = await res.text().catch(() => '')
     throw new Error(text || `Proxy list ${res.status}`)
@@ -42,14 +67,14 @@ export async function fetchDriveProxyImageList(baseUrl) {
     .map((row) => {
       const name = row.name.trim()
       const id = row.id != null && String(row.id).trim() ? String(row.id).trim() : name
-      const imageSrc = `${base}/${encodePathForProxy(name)}`
+      const imageSrc = proxyFileUrl(base, name, folder)
       return {
         id,
         name,
         title: stripExtension(name.split('/').pop() || name),
         description: '',
         imageSrc,
-        thumbnailSrc: `${imageSrc}?size=thumb`,
+        thumbnailSrc: proxyThumbnailUrl(imageSrc),
       }
     })
 

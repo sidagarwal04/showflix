@@ -72,6 +72,9 @@ export default function MasonryGallery({
     return fromSection || fromEnv || DEFAULT_DRIVE_IMAGE_PROXY_URL
   }, [section.driveImageProxyBase])
 
+  /** Optional Worker `?folder=` for a second Drive folder (e.g. sprinkle-season uses `2`). Bump Era omits this. */
+  const proxyFolder = section.driveImageProxyFolder
+
   const [loadState, setLoadState] = useState(() => ({ status: 'loading' }))
 
   /** Natural sizes when metadata is measured client-side — keyed by file id for stable order when using `masonryRhythm`. */
@@ -80,7 +83,7 @@ export default function MasonryGallery({
   useEffect(() => {
     let cancelled = false
     startTransition(() => setLoadState({ status: 'loading' }))
-    fetchDriveProxyImageList(proxyBase)
+    fetchDriveProxyImageList(proxyBase, { folder: proxyFolder })
       .then((items) => {
         if (!cancelled) {
           startTransition(() => {
@@ -95,7 +98,7 @@ export default function MasonryGallery({
     return () => {
       cancelled = true
     }
-  }, [proxyBase])
+  }, [proxyBase, proxyFolder])
 
   const effectiveItems = useMemo(() => {
     if (loadState.status === 'ready') return loadState.items ?? []

@@ -1,8 +1,8 @@
 /**
  * SR Originals — media manifest (Worker image proxy + optional YouTube hero)
  * ---------------------------------------------------------------------------
- * Masonry galleries load images from the Cloudflare Worker (`GET /list` + `GET /{filename}`).
- * Set `VITE_DRIVE_IMAGE_PROXY_URL` or `section.driveImageProxyBase` (see MasonryGallery).
+ * Masonry galleries load from the Cloudflare Worker (`GET /list` + `GET /{filename}`).
+ * Optional `section.driveImageProxyFolder` adds `?folder=` to list and image URLs (see sprinkle-season).
  *
  * Hero video when not using YouTube: optional Drive `videoId` or placeholder MP4.
  */
@@ -92,12 +92,13 @@ export const mediaConfig = {
   ],
 }
 
-/** `/sprinkle-season` — masonry; same Worker `/list` as home unless `driveImageProxyBase` is set. */
+/** `/sprinkle-season` — second Drive folder via Worker `?folder=2`. */
 export const sprinkleSeasonGallerySection = {
   id: 'sprinkle-season',
   kicker: "The guest list, on film",
   title: "🎀 Sprinkle Season · The Preview Cut",
   type: 'masonry',
   masonryLayout: 'auto',
+  driveImageProxyFolder: '2',
   items: [],
 }
