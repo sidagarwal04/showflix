@@ -5,6 +5,8 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 const SPLASH_VIDEO_DESKTOP = '/sr-originals-splash.mp4'
 const SPLASH_VIDEO_MOBILE = '/sr-originals-splash-mobile.mp4'
 const FALLBACK_IMG = '/sr-originals-splash-logo-bgremove.png'
+/** Same breakpoint as `useMediaQuery` for hero / splash assets */
+const MOBILE_SPLASH_MQ = '(max-width: 767px)'
 
 /**
  * Full-screen intro. One tap unlocks unmuted playback (browser policy).
@@ -16,8 +18,12 @@ export default function Intro({ onDone }) {
   const [useFallback, setUseFallback] = useState(false)
   /** Must be true before we call play() — that gesture unlocks unmuted audio every time. */
   const [started, setStarted] = useState(false)
-  const isMobile = useMediaQuery('(max-width: 767px)')
-  const [splashVideoSrc, setSplashVideoSrc] = useState(SPLASH_VIDEO_DESKTOP)
+  const isMobile = useMediaQuery(MOBILE_SPLASH_MQ)
+  const [splashVideoSrc, setSplashVideoSrc] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia(MOBILE_SPLASH_MQ).matches
+      ? SPLASH_VIDEO_MOBILE
+      : SPLASH_VIDEO_DESKTOP,
+  )
 
   useEffect(() => {
     if (started) return
@@ -45,7 +51,16 @@ export default function Intro({ onDone }) {
     safetyTimerRef.current = window.setTimeout(finishOnce, Math.ceil(d * 1000) + 1000)
   }
 
-  const startIntro = () => setStarted(true)
+  const startIntro = () => {
+    // Gesture handler: read viewport now so we never play the desktop file on phones if
+    // `useMediaQuery` had not updated yet (previously `started` blocked the src sync effect).
+    if (typeof window !== 'undefined') {
+      setSplashVideoSrc(
+        window.matchMedia(MOBILE_SPLASH_MQ).matches ? SPLASH_VIDEO_MOBILE : SPLASH_VIDEO_DESKTOP,
+      )
+    }
+    setStarted(true)
+  }
 
   useEffect(() => {
     if (!useFallback) return
