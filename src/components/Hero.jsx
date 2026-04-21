@@ -46,15 +46,17 @@ export default function Hero({
   return (
     <section className="relative isolate h-[calc(100svh-68px)] min-h-[calc(100svh-68px)] w-full flex-shrink-0 overflow-hidden bg-black md:h-[calc(100svh-70px)] md:min-h-[calc(100svh-70px)]">
       {youtubeId ? (
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden [container-type:size]">
           {/*
-            Shift the embed **down** inside the hero (same box): larger +translate-y after -50%
-            so the focal area sits lower and doesn’t read as “under” the nav strip.
+            Cover the hero (no side letterboxing): width/height must scale with the hero box,
+            not only vw — on wide viewports 100vw×56.25vw is shorter than the hero, so YouTube
+            pillarboxed. Use cqw/cqh so the 16:9 embed always covers like object-fit: cover.
+            Shift the embed **down** after centering so the focal area sits below the nav strip.
           */}
           <iframe
             key={muted ? 'muted' : 'unmuted'}
             title="Hero background video"
-            className="absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-screen min-w-[177.77vh] max-w-none origin-center scale-[1.22] -translate-x-1/2 translate-y-[calc(-50%+clamp(2.25rem,6.5vh,5.25rem))] border-0"
+            className="absolute left-1/2 top-1/2 aspect-video w-[max(100cqw,calc(100cqh*16/9))] max-w-none origin-center -translate-x-1/2 translate-y-[calc(-50%+clamp(2.25rem,6.5vh,5.25rem))] border-0"
             src={embedSrc}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen={false}
