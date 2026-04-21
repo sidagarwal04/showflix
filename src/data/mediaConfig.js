@@ -30,7 +30,7 @@ export const mediaConfig = {
      * Hero background + Play modal: YouTube (takes priority when set).
      * Paste a full URL or the 11-char id — both work via `parseYoutubeVideoId` in Hero.
      */
-    youtubeUrl: 'https://www.youtube.com/watch?v=BniuMV3YjTk',
+    youtubeUrl: 'https://youtu.be/fuK43aXcrp8',
 
     // Google Drive file id when not using YouTube / placeholder MP4 below
     videoId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
