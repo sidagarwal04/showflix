@@ -16,10 +16,14 @@ export const mediaConfig = {
 
   hero: {
     /**
-     * Hero background + Play modal: YouTube (takes priority when set).
-     * Paste a full URL or the 11-char id — both work via `parseYoutubeVideoId` in Hero.
+     * Hero background: full-bleed autoplay (muted until user unmutes). Use a full watch / youtu.be
+     * URL or the 11-char id.
      */
-    youtubeUrl: 'https://youtu.be/fuK43aXcrp8',
+    youtubeUrl: 'https://youtu.be/XgCXiK7j2yM',
+    /**
+     * Play button opens this in the modal (with sound). If omitted, falls back to `youtubeUrl`.
+     */
+    youtubePlayUrl: 'https://youtu.be/0ul7k9nAoJ8',
 
     // Google Drive file id when not using YouTube / placeholder MP4 below
     videoId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',

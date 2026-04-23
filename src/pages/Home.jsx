@@ -38,7 +38,9 @@ export default function Home() {
   }
 
   const openHeroPlay = () => {
-    const ytId = parseYoutubeVideoId(hero.youtubeUrl || hero.youtubeVideoId || '')
+    const ytId = parseYoutubeVideoId(
+      hero.youtubePlayUrl || hero.youtubeUrl || hero.youtubeVideoId || '',
+    )
     if (ytId) {
       setModal({
         kind: 'youtube',
