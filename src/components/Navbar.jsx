@@ -12,8 +12,6 @@ function scrollToTop() {
 
 /** Served from `public/showflix-icon.png` */
 const BRAND_LOGO_SRC = '/showflix-icon.png'
-/** Decorative baby footprints — `public/baby-footprints.png` */
-const DECOR_FOOTPRINTS_SRC = '/baby-footprints.png'
 
 export default function Navbar({ brandName = 'ShowFlix' }) {
   return (
@@ -49,19 +47,6 @@ export default function Navbar({ brandName = 'ShowFlix' }) {
             </NavLink>
             */}
           </nav>
-        </div>
-
-        <div
-          className="pointer-events-none flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white p-1.5 shadow-sm md:h-10 md:w-10 md:p-2"
-          aria-hidden
-        >
-          <img
-            src={DECOR_FOOTPRINTS_SRC}
-            alt=""
-            className="h-full w-full object-contain"
-            decoding="async"
-            draggable={false}
-          />
         </div>
       </div>
     </header>
