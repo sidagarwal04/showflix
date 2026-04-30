@@ -72,7 +72,7 @@ export default function MasonryGallery({
     return fromSection || fromEnv || DEFAULT_DRIVE_IMAGE_PROXY_URL
   }, [section.driveImageProxyBase])
 
-  /** Optional Worker `?folder=` for a second Drive folder (e.g. sprinkle-season uses `2`). Bump Era omits this. */
+  /** Optional Worker `?folder=` for a second Drive folder (e.g. gallery-two uses `2`). Gallery One omits this. */
   const proxyFolder = section.driveImageProxyFolder
 
   const [loadState, setLoadState] = useState(() => ({ status: 'loading' }))

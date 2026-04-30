@@ -105,7 +105,7 @@ export default function Intro({ onDone }) {
           {useFallback ? (
             <img
               src={FALLBACK_IMG}
-              alt="SR Originals"
+              alt="ShowFlix"
               className="absolute inset-0 h-full w-full min-h-0 min-w-0 object-cover"
               width={13156}
               height={3100}
@@ -118,7 +118,7 @@ export default function Intro({ onDone }) {
               src={splashVideoSrc}
               playsInline
               preload="auto"
-              aria-label="SR Originals"
+              aria-label="ShowFlix"
               onLoadedMetadata={onLoadedMetadata}
               onEnded={finishOnce}
               onError={() => setUseFallback(true)}

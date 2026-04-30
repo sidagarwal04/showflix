@@ -37,11 +37,11 @@ export default function Navbar({ brandName = 'SIDFLIX' }) {
             <NavLink to="/" className={linkClass} end onClick={scrollToTop}>
               Home
             </NavLink>
-            <NavLink to="/bump-era" className={linkClass}>
-              Bump Era
+            <NavLink to="/gallery-one" className={linkClass}>
+              Gallery One
             </NavLink>
-            <NavLink to="/sprinkle-season" className={linkClass}>
-              Sprinkle Season
+            <NavLink to="/gallery-two" className={linkClass}>
+              Gallery Two
             </NavLink>
             {/* Little Moments — add back with route in App.jsx when ready
             <NavLink to="/little-moments" className={linkClass}>

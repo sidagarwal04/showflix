@@ -132,7 +132,7 @@ function computeMasonryDisplayOrderSingle(items, sizeById) {
 /**
  * Reorder gallery indices for layout rhythm. Optional **`chunkSize`**: only reorder **within**
  * consecutive chunks of the **folder order** list so chronological story is preserved in blocks
- * (used for Sprinkle Season).
+ * (used for Gallery Two).
  *
  * @param {Array<{ id?: string, width?: number, height?: number }>} items — **folder / API order**
  * @param {Record<string, { w: number, h: number }>} sizeById

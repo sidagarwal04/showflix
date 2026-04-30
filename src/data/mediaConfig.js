@@ -1,5 +1,5 @@
 /**
- * SR Originals — media manifest (Worker image proxy + optional YouTube hero)
+ * ShowFlix  media manifest (Worker image proxy + optional YouTube hero)
  * ---------------------------------------------------------------------------
  * Masonry galleries load from the Cloudflare Worker (`GET /list` + `GET /{filename}`).
  * Optional `section.driveImageProxyFolder` adds `?folder=` to list and image URLs (see sprinkle-season).
@@ -7,12 +7,12 @@
  * Hero video when not using YouTube: optional Drive `videoId` or placeholder MP4.
  */
 
-/** Public sample MP4 (W3C test asset) — swap for your Drive `videoId` in production. */
+/** Public sample MP4 (W3C test asset)  swap for your Drive `videoId` in production. */
 export const PLACEHOLDER_HERO_VIDEO_SRC =
   'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'
 
 export const mediaConfig = {
-  brandName: 'SR Originals',
+  brandName: 'ShowFlix',
 
   hero: {
     /**
@@ -71,7 +71,7 @@ export const mediaConfig = {
        * Single-item override: `layout: 'manual'` + `gridColumn` / `gridRow` on that item only.
        */
       kicker: "Spoiler: the finale's adorable",
-      title: "🔥 Bump Era - Director's Cut",
+      title: " Gallery One - Director's Cut",
       type: 'masonry',
       masonryLayout: 'auto',
       /** Fallback if `/list` fails (normally populated from the Worker). */
@@ -96,11 +96,11 @@ export const mediaConfig = {
   ],
 }
 
-/** `/sprinkle-season` — second Drive folder via Worker `?folder=2`. */
-export const sprinkleSeasonGallerySection = {
-  id: 'sprinkle-season',
+/** `/gallery-two`  second Drive folder via Worker `?folder=2`. */
+export const galleryTwoSection = {
+  id: 'gallery-two',
   kicker: "The guest list, on film",
-  title: "🎀 Sprinkle Season · The Preview Cut",
+  title: " Gallery Two  The Preview Cut",
   type: 'masonry',
   masonryLayout: 'auto',
   driveImageProxyFolder: '2',

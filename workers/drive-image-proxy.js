@@ -6,8 +6,8 @@
  *
  * Secrets / vars (Worker → Settings → Variables):
  *   GOOGLE_API_KEY  — Google Cloud API key (Drive API enabled; restrict to Drive API only).
- *   FOLDER_ID       — Primary Drive folder ID (Bump Era gallery).
- *   FOLDER_ID_2     — Second folder (e.g. Sprinkle Season); optional if you only use one folder.
+ *   FOLDER_ID       — Primary Drive folder ID (Gallery One gallery).
+ *   FOLDER_ID_2     — Second folder (e.g. Gallery Two); optional if you only use one folder.
  *
  * Drive folders should allow link sharing so `files.get` + `alt=media` works with an API key.
  *

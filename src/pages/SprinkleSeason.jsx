@@ -5,10 +5,10 @@ import Modal from '../components/Modal'
 import { sprinkleSeasonGallerySection } from '../data/mediaConfig'
 
 /**
- * `/sprinkle-season` — standalone gallery (Bump Era–style heading + masonry).
+ * `/gallery-two` — standalone gallery (Gallery One-style heading + masonry).
  * Images from Cloudflare Worker (`VITE_DRIVE_IMAGE_PROXY_URL` or default base URL).
  */
-export default function SprinkleSeason() {
+export default function GalleryTwo() {
   const section = useMemo(() => sprinkleSeasonGallerySection, [])
 
   const [modal, setModal] = useState(null)

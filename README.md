@@ -1,6 +1,6 @@
-# SR Originals
+# ShowFlix
 
-![SR Originals preview](public/og-image.jpg)
+![ShowFlix preview](public/og-image.jpg)
 
 A Netflix-style family gallery — hero video, carousels, and masonry grids. Images are loaded through a **Cloudflare Worker** that proxies and caches Google Drive files (see below). Optional **YouTube** embed for the hero.
 
@@ -23,8 +23,8 @@ The reference implementation lives in **[`workers/drive-image-proxy.js`](workers
 | Name | Purpose |
 | --- | --- |
 | `GOOGLE_API_KEY` | Google Cloud API key with **Google Drive API** enabled. Restrict the key to Drive API and (optionally) IP / usage quotas. |
-| `FOLDER_ID` | Primary album folder (Bump Era / home gallery). |
-| `FOLDER_ID_2` | Second album (e.g. Sprinkle Season). Omit if you only use one folder. |
+| `FOLDER_ID` | Primary album folder (Gallery One / home gallery). |
+| `FOLDER_ID_2` | Second album (e.g. Gallery Two). Omit if you only use one folder. |
 
 Folders should be shared so files are readable with the API key (e.g. **Anyone with the link** as needed for your setup).
 
@@ -44,7 +44,7 @@ Responses set `Access-Control-Allow-Origin: *` so your Netlify (or any) origin c
 ### Frontend mapping
 
 - Default Worker host is set in [`src/components/MasonryGallery.jsx`](src/components/MasonryGallery.jsx) (override with `VITE_DRIVE_IMAGE_PROXY_URL`).
-- [`src/data/mediaConfig.js`](src/data/mediaConfig.js): Bump Era uses the default folder; **Sprinkle Season** sets `driveImageProxyFolder: '2'` so URLs include `?folder=2`.
+- [`src/data/mediaConfig.js`](src/data/mediaConfig.js): Gallery One uses the default folder; **Gallery Two** sets `driveImageProxyFolder: '2'` so URLs include `?folder=2`.
 - URL building and filters: [`src/services/driveImageProxy.js`](src/services/driveImageProxy.js).
 
 **Workflow:** add photos to the Drive folder → after the list cache expires (minutes), refresh the site; no redeploy required for new filenames.
@@ -104,8 +104,8 @@ Create a local `.env` or `.env.local` if you use these (both are gitignored). **
 | Path | Page |
 | --- | --- |
 | `/` | Home |
-| `/bump-era` | Bump Era (alias: `/maternity` → `/bump-era`) |
-| `/sprinkle-season` | Sprinkle Season (alias: `/baby-shower` → `/sprinkle-season`) |
+| `/gallery-one` | Gallery One (alias: `/maternity`  `/gallery-one`) |
+| `/gallery-two` | Gallery Two (alias: `/baby-shower`  `/gallery-two`) |
 
 Unknown paths redirect to `/`.
 
