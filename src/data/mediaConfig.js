@@ -29,11 +29,10 @@ export const mediaConfig = {
     videoId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
     /** If true (and no YouTube), Hero uses PLACEHOLDER_HERO_VIDEO_SRC instead of Drive. */
     usePlaceholderVideo: false,
-    title: 'Our Story',
-    subtitle: 'A FAMILY ORIGINAL',
-    description:
-      'A cinematic scrapbook of love, anticipation, and the quiet magic before our little one arrived. Press play when you are ready.',
-    tags: ['Love', 'Family', 'New Beginnings'],
+    title: 'Hero Title',
+    subtitle: 'A Special Presentation',
+    description: 'A collection of our favorite moments. Press play to begin.',
+    tags: ['Tag One', 'Tag Two', 'Tag Three'],
   },
 
   sections: [
@@ -70,8 +69,8 @@ export const mediaConfig = {
        * Set `masonryLayout: 'manual'` and per-item `gridColumn` / `gridRow` to hand-place tiles.
        * Single-item override: `layout: 'manual'` + `gridColumn` / `gridRow` on that item only.
        */
-      kicker: "Spoiler: the finale's adorable",
-      title: " Gallery One - Director's Cut",
+      kicker: "First Collection",
+      title: "Gallery One",
       type: 'masonry',
       masonryLayout: 'auto',
       /** Fallback if `/list` fails (normally populated from the Worker). */
@@ -99,8 +98,8 @@ export const mediaConfig = {
 /** `/gallery-two`  second Drive folder via Worker `?folder=2`. */
 export const galleryTwoSection = {
   id: 'gallery-two',
-  kicker: "The guest list, on film",
-  title: " Gallery Two  The Preview Cut",
+  kicker: "Second Collection",
+  title: "Gallery Two",
   type: 'masonry',
   masonryLayout: 'auto',
   driveImageProxyFolder: '2',
