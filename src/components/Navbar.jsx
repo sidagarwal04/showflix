@@ -10,8 +10,8 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-/** Served from `public/showlfix-icon.png` */
-const BRAND_LOGO_SRC = '/showlfix-icon.png'
+/** Served from `public/showflix-icon.png` */
+const BRAND_LOGO_SRC = '/showflix-icon.png'
 /** Decorative baby footprints — `public/baby-footprints.png` */
 const DECOR_FOOTPRINTS_SRC = '/baby-footprints.png'
 

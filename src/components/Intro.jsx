@@ -4,7 +4,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const SPLASH_VIDEO_DESKTOP = '/sr-originals-splash.mp4'
 const SPLASH_VIDEO_MOBILE = '/sr-originals-splash-mobile.mp4'
-const FALLBACK_IMG = '/showlfix-icon.png'
+const FALLBACK_IMG = '/showflix-icon.png'
 /** Same breakpoint as `useMediaQuery` for hero / splash assets */
 const MOBILE_SPLASH_MQ = '(max-width: 767px)'
 
