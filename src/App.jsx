@@ -3,8 +3,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Intro from './components/Intro'
 import Layout from './components/Layout'
 import Home from './pages/Home'
-import BumpEra from './pages/BumpEra'
-import SprinkleSeason from './pages/SprinkleSeason'
+import GalleryOne from './pages/GalleryOne'
+import GalleryTwo from './pages/GalleryTwo'
 // import LittleMoments from './pages/LittleMoments' // enable when Little Moments goes live
 
 export default function App() {
@@ -18,10 +18,10 @@ export default function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
-              <Route path="/bump-era" element={<BumpEra />} />
-              <Route path="/maternity" element={<Navigate to="/bump-era" replace />} />
-              <Route path="/sprinkle-season" element={<SprinkleSeason />} />
-              <Route path="/baby-shower" element={<Navigate to="/sprinkle-season" replace />} />
+              <Route path="/gallery-one" element={<GalleryOne />} />
+              <Route path="/maternity" element={<Navigate to="/gallery-one" replace />} />
+              <Route path="/gallery-two" element={<GalleryTwo />} />
+              <Route path="/baby-shower" element={<Navigate to="/gallery-two" replace />} />
               {/* <Route path="/little-moments" element={<LittleMoments />} /> */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

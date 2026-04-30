@@ -2,14 +2,14 @@ import { useCallback, useMemo, useState } from 'react'
 import BackToTop from '../components/BackToTop'
 import MasonryGallery from '../components/MasonryGallery'
 import Modal from '../components/Modal'
-import { sprinkleSeasonGallerySection } from '../data/mediaConfig'
+import { galleryTwoSection } from '../data/mediaConfig'
 
 /**
  * `/gallery-two` — standalone gallery (Gallery One-style heading + masonry).
  * Images from Cloudflare Worker (`VITE_DRIVE_IMAGE_PROXY_URL` or default base URL).
  */
 export default function GalleryTwo() {
-  const section = useMemo(() => sprinkleSeasonGallerySection, [])
+  const section = useMemo(() => galleryTwoSection, [])
 
   const [modal, setModal] = useState(null)
 
