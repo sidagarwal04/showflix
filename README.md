@@ -79,6 +79,24 @@ The app runs at [http://localhost:5173](http://localhost:5173).
 
 No `.env` file is required. Defaults include the Worker base URL in code; override in [`src/data/mediaConfig.js`](src/data/mediaConfig.js) (`driveImageProxyBase`, `driveImageProxyFolder`) if you fork this template.
 
+## Adapting for Your Own Use
+
+If you are cloning or forking this repository to create your own gallery, please make sure to update the following:
+
+1. **Deploy your own Cloudflare Worker:**
+   - Create a new Cloudflare Worker and paste the code from `workers/drive-image-proxy.js`.
+   - Set `GOOGLE_API_KEY`, `FOLDER_ID`, and (optionally) `FOLDER_ID_2` as Secrets/Environment Variables in your Cloudflare dashboard.
+2. **Point the Frontend to your Worker:**
+   - Create a `.env` file locally (and add this to your hosting platform, e.g., Netlify/Vercel) and specify your deployed worker's URL:
+     `VITE_DRIVE_IMAGE_PROXY_URL=https://your-worker-url.workers.dev`
+3. **Customize Content & Config:**
+   - Edit `src/data/mediaConfig.js` to update the hero video, gallery titles, text copy, and folder configurations.
+4. **Update Assets & Metadata:**
+   - Replace `public/og-image.png` with your own preview image.
+   - Update `package.json` to change the `"name"` (currently `sr-originals`) and other details to match your own project.
+   - Update the `<title>` and `<meta>` tags in `index.html`.
+   - Change the project license in `package.json` and `README.md` if you plan to make it public.
+
 ## Optional environment variables
 
 Only if you need overrides (e.g. different Worker URL per deploy without editing code):
@@ -104,8 +122,8 @@ Create a local `.env` or `.env.local` if you use these (both are gitignored). **
 | Path | Page |
 | --- | --- |
 | `/` | Home |
-| `/gallery-one` | Gallery One (alias: `/album-one`  `/gallery-one`) |
-| `/gallery-two` | Gallery Two (alias: `/album-two`  `/gallery-two`) |
+| `/gallery-one` | Gallery One (alias: `/album-one` -> `/gallery-one`) |
+| `/gallery-two` | Gallery Two (alias: `/album-two` -> `/gallery-two`) |
 
 Unknown paths redirect to `/`.
 
