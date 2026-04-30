@@ -49,33 +49,33 @@ export const mediaConfig = {
 
   sections: [
     /*
-     * 🤰 Maternity Films (video carousel) — uncomment when you have short clips / reels ready.
+     * 🎬 Short Films (video carousel) — uncomment when you have short clips / reels ready.
      * ---------------------------------------------------------------------------
     {
-      id: 'maternity-films',
-      title: '🤰 Maternity Films',
+      id: 'short-films',
+      title: '🎬 Short Films',
       type: 'video',
       items: [
         {
           id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-          title: 'First Kicks',
-          description: 'Short film — morning light and nursery plans.',
+          title: 'Video One',
+          description: 'Short film — morning light.',
         },
         {
           id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-          title: 'Bump Diary',
-          description: 'Week-by-week memories.',
+          title: 'Video Two',
+          description: 'A collection of memories.',
         },
         {
           id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-          title: 'Lullaby',
-          description: 'A soft moment before the world got louder.',
+          title: 'Video Three',
+          description: 'A soft moment.',
         },
       ],
     },
     */
     {
-      id: 'maternity-shoot',
+      id: 'gallery-one',
       /**
        * Masonry: `auto` measures each image after load and assigns wide vs tall grid spans.
        * Set `masonryLayout: 'manual'` and per-item `gridColumn` / `gridRow` to hand-place tiles.
@@ -88,17 +88,17 @@ export const mediaConfig = {
       items: fallbackItems,
     },
     /*
-     * ✨ Little Moments — uncomment when this section is ready.
+     * ✨ Bonus Content — uncomment when this section is ready.
      * ---------------------------------------------------------------------------
     {
-      id: 'little-moments',
-      title: '✨ Little Moments',
+      id: 'bonus-content',
+      title: '✨ Bonus Content',
       type: 'photo',
       items: [
         {
           id: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
           title: 'Coming soon',
-          description: 'First smiles, tiny toes, and everyday magic.',
+          description: 'Everyday magic and special memories.',
         },
       ],
     },

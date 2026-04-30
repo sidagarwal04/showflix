@@ -2,7 +2,7 @@
 
 ![ShowFlix preview](public/og-image.png)
 
-A Netflix-style family gallery — hero video, carousels, and masonry grids. Images are loaded through a **Cloudflare Worker** that proxies and caches Google Drive files (see below). Optional **YouTube** embed for the hero.
+A Netflix-style gallery — hero video, carousels, and masonry grids. Images are loaded through a **Cloudflare Worker** that proxies and caches Google Drive files (see below). Optional **YouTube** embed for the hero.
 
 ## Why a Worker instead of direct Drive links?
 
@@ -104,8 +104,8 @@ Create a local `.env` or `.env.local` if you use these (both are gitignored). **
 | Path | Page |
 | --- | --- |
 | `/` | Home |
-| `/gallery-one` | Gallery One (alias: `/maternity`  `/gallery-one`) |
-| `/gallery-two` | Gallery Two (alias: `/baby-shower`  `/gallery-two`) |
+| `/gallery-one` | Gallery One (alias: `/album-one`  `/gallery-one`) |
+| `/gallery-two` | Gallery Two (alias: `/album-two`  `/gallery-two`) |
 
 Unknown paths redirect to `/`.
 

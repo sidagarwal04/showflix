@@ -41,9 +41,9 @@ export default function Navbar({ brandName = 'ShowFlix' }) {
             <NavLink to="/gallery-two" className={linkClass}>
               Gallery Two
             </NavLink>
-            {/* Little Moments — add back with route in App.jsx when ready
-            <NavLink to="/little-moments" className={linkClass}>
-              Little Moments
+            {/* Bonus Content — add back with route in App.jsx when ready
+            <NavLink to="/bonus-content" className={linkClass}>
+              Bonus Content
             </NavLink>
             */}
           </nav>

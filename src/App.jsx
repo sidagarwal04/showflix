@@ -5,7 +5,7 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import GalleryOne from './pages/GalleryOne'
 import GalleryTwo from './pages/GalleryTwo'
-// import LittleMoments from './pages/LittleMoments' // enable when Little Moments goes live
+// import BonusContent from './pages/BonusContent' // enable when Bonus Content goes live
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true)
@@ -19,10 +19,10 @@ export default function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/gallery-one" element={<GalleryOne />} />
-              <Route path="/maternity" element={<Navigate to="/gallery-one" replace />} />
+              <Route path="/album-one" element={<Navigate to="/gallery-one" replace />} />
               <Route path="/gallery-two" element={<GalleryTwo />} />
-              <Route path="/baby-shower" element={<Navigate to="/gallery-two" replace />} />
-              {/* <Route path="/little-moments" element={<LittleMoments />} /> */}
+              <Route path="/album-two" element={<Navigate to="/gallery-two" replace />} />
+              {/* <Route path="/bonus-content" element={<BonusContent />} /> */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
