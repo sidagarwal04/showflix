@@ -4,7 +4,7 @@ import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const SPLASH_VIDEO_DESKTOP = '/sr-originals-splash.mp4'
 const SPLASH_VIDEO_MOBILE = '/sr-originals-splash-mobile.mp4'
-const FALLBACK_IMG = '/sr-originals-splash-logo-bgremove.png'
+const FALLBACK_IMG = '/showlfix-icon.png'
 /** Same breakpoint as `useMediaQuery` for hero / splash assets */
 const MOBILE_SPLASH_MQ = '(max-width: 767px)'
 
@@ -107,8 +107,6 @@ export default function Intro({ onDone }) {
               src={FALLBACK_IMG}
               alt="ShowFlix"
               className="absolute inset-0 h-full w-full min-h-0 min-w-0 object-cover"
-              width={13156}
-              height={3100}
               draggable={false}
             />
           ) : (

@@ -10,12 +10,12 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-/** Served from `public/sr-originals-logo.png` */
-const BRAND_LOGO_SRC = '/sr-originals-logo.png'
+/** Served from `public/showlfix-icon.png` */
+const BRAND_LOGO_SRC = '/showlfix-icon.png'
 /** Decorative baby footprints — `public/baby-footprints.png` */
 const DECOR_FOOTPRINTS_SRC = '/baby-footprints.png'
 
-export default function Navbar({ brandName = 'SIDFLIX' }) {
+export default function Navbar({ brandName = 'ShowFlix' }) {
   return (
     <header className="relative z-40 w-full bg-black shadow-[inset_0_-1px_0_rgba(255,255,255,0.08)]">
       <div className="mx-auto flex h-[68px] max-w-[1920px] items-center justify-between gap-3 px-4 sm:px-6 md:h-[70px] md:gap-6 md:px-10">
