@@ -1,11 +1,23 @@
 /**
  * ShowFlix  media manifest (Worker image proxy + optional YouTube hero)
  * ---------------------------------------------------------------------------
- * Masonry galleries load from the Cloudflare Worker (`GET /list` + `GET /{filename}`).
- * Optional `section.driveImageProxyFolder` adds `?folder=` to list and image URLs (see sprinkle-season).
- *
  * Hero video when not using YouTube: optional Drive `videoId` or placeholder MP4.
  */
+
+const fallbackItems = [
+  { id: 'img1', imageSrc: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&h=800&q=80' }, // Landscape
+  { id: 'img2', imageSrc: 'https://images.unsplash.com/photo-1497215848147-380d1d2b826b?auto=format&fit=crop&w=800&h=1200&q=80' }, // Portrait
+  { id: 'img3', imageSrc: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&h=1200&q=80' }, // Portrait
+  { id: 'img4', imageSrc: 'https://images.unsplash.com/photo-1445905595283-21f8ae8a33d2?auto=format&fit=crop&w=1200&h=800&q=80' }, // Landscape
+  { id: 'img5', imageSrc: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1000&h=1000&q=80' }, // Square
+  { id: 'img6', imageSrc: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&h=1200&q=80' }, // Portrait
+  { id: 'img7', imageSrc: 'https://images.unsplash.com/photo-1470071131384-001b85755b36?auto=format&fit=crop&w=1200&h=800&q=80' }, // Landscape
+  { id: 'img8', imageSrc: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&h=800&q=80' }, // Landscape
+  { id: 'img9', imageSrc: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=800&h=1200&q=80' }, // Portrait
+  { id: 'img10', imageSrc: 'https://images.unsplash.com/photo-1520333789090-1afc82d414f5?auto=format&fit=crop&w=1000&h=1000&q=80' }, // Square
+  { id: 'img11', imageSrc: 'https://images.unsplash.com/photo-1516589178582-19bb01e05d2c?auto=format&fit=crop&w=800&h=1200&q=80' }, // Portrait
+  { id: 'img12', imageSrc: 'https://images.unsplash.com/photo-1504159506876-276ce56616a2?auto=format&fit=crop&w=1200&h=800&q=80' }, // Landscape
+];
 
 /** Public sample MP4 (W3C test asset)  swap for your Drive `videoId` in production. */
 export const PLACEHOLDER_HERO_VIDEO_SRC =
@@ -73,8 +85,7 @@ export const mediaConfig = {
       title: "Gallery One",
       type: 'masonry',
       masonryLayout: 'auto',
-      /** Fallback if `/list` fails (normally populated from the Worker). */
-      items: [],
+      items: fallbackItems,
     },
     /*
      * ✨ Little Moments — uncomment when this section is ready.
@@ -102,6 +113,5 @@ export const galleryTwoSection = {
   title: "Gallery Two",
   type: 'masonry',
   masonryLayout: 'auto',
-  driveImageProxyFolder: '2',
-  items: [],
+  items: fallbackItems,
 }

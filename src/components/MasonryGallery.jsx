@@ -66,45 +66,10 @@ export default function MasonryGallery({
   const wide = useMediaQuery('(min-width: 768px)')
   const autoLayout = section.masonryLayout !== 'manual'
 
-  const proxyBase = useMemo(() => {
-    const fromSection = typeof section.driveImageProxyBase === 'string' ? section.driveImageProxyBase.trim() : ''
-    const fromEnv = import.meta.env.VITE_DRIVE_IMAGE_PROXY_URL?.trim() || ''
-    return fromSection || fromEnv || DEFAULT_DRIVE_IMAGE_PROXY_URL
-  }, [section.driveImageProxyBase])
-
-  /** Optional Worker `?folder=` for a second Drive folder (e.g. gallery-two uses `2`). Gallery One omits this. */
-  const proxyFolder = section.driveImageProxyFolder
-
-  const [loadState, setLoadState] = useState(() => ({ status: 'loading' }))
+  const effectiveItems = section.items ?? []
 
   /** Natural sizes when metadata is measured client-side — keyed by file id for stable order when using `masonryRhythm`. */
   const [measuredById, setMeasuredById] = useState({})
-
-  useEffect(() => {
-    let cancelled = false
-    startTransition(() => setLoadState({ status: 'loading' }))
-    fetchDriveProxyImageList(proxyBase, { folder: proxyFolder })
-      .then((items) => {
-        if (!cancelled) {
-          startTransition(() => {
-            setLoadState({ status: 'ready', items })
-            setMeasuredById({})
-          })
-        }
-      })
-      .catch((err) => {
-        if (!cancelled) startTransition(() => setLoadState({ status: 'error', error: err }))
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [proxyBase, proxyFolder])
-
-  const effectiveItems = useMemo(() => {
-    if (loadState.status === 'ready') return loadState.items ?? []
-    if (loadState.status === 'error') return section.items ?? []
-    return []
-  }, [loadState, section.items])
 
   const sectionForModal = useMemo(
     () => ({ ...section, items: effectiveItems }),
@@ -168,9 +133,7 @@ export default function MasonryGallery({
     return 'aspect-square'
   }
 
-  const showLoading = loadState.status === 'loading'
-  const showError = loadState.status === 'error'
-  const showEmpty = loadState.status === 'ready' && effectiveItems.length === 0
+  const showEmpty = effectiveItems.length === 0
 
   return (
     <section
@@ -187,21 +150,13 @@ export default function MasonryGallery({
           {section.title}
         </h2>
 
-        {showLoading && (
-          <p className="mb-6 font-[family-name:var(--font-body)] text-sm text-black/50">Loading…</p>
-        )}
-        {showError && (
-          <p className="mb-6 font-[family-name:var(--font-body)] text-sm text-red-800/90">
-            Could not load photos. Showing backup list from config if available.
-          </p>
-        )}
         {showEmpty && (
           <p className="mb-6 font-[family-name:var(--font-body)] text-sm text-black/50">
             No images found.
           </p>
         )}
 
-        {!showLoading && effectiveItems.length > 0 && (
+        {effectiveItems.length > 0 && (
           <div className="rounded-none bg-white p-[4px] md:p-1">
             <div className="grid grid-cols-1 gap-[3px] bg-white md:auto-rows-[minmax(200px,18vw)] md:grid-flow-dense md:grid-cols-12 md:gap-[3px]">
               {displayOrder.map((originalIndex, visualIndex) => {
