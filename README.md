@@ -93,7 +93,7 @@ If you are cloning or forking this repository to create your own gallery, please
    - Edit `src/data/mediaConfig.js` to update the hero video, gallery titles, text copy, and folder configurations.
 4. **Update Assets & Metadata:**
    - Replace `public/og-image.png` with your own preview image.
-   - Update `package.json` to change the `"name"` (currently `sr-originals`) and other details to match your own project.
+   - Update `package.json` to change the `"name"` and other details to match your own project.
    - Update the `<title>` and `<meta>` tags in `index.html`.
    - Change the project license in `package.json` and `README.md` if you plan to make it public.
 
