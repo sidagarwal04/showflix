@@ -1,6 +1,6 @@
 # ShowFlix
 
-![ShowFlix preview](public/og-image.jpg)
+![ShowFlix preview](public/og-image.png)
 
 A Netflix-style family gallery — hero video, carousels, and masonry grids. Images are loaded through a **Cloudflare Worker** that proxies and caches Google Drive files (see below). Optional **YouTube** embed for the hero.
 
